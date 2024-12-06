@@ -1,12 +1,9 @@
 "use client";
-import Link from "next/link";
 import Logo from "./components/Logo";
 import GradientBackground from "./components/GradientBackground";
-import { useState } from "react";
+import BlackButton from "./components/BlackButton";
 
 export default function Home() {
-  const [isHovered, setIsHovered] = useState(false);
-
   return (
     <GradientBackground>
       <div className="min-h-screen flex flex-col p-4">
@@ -23,25 +20,7 @@ export default function Home() {
               Perfect AI Partner
             </p>
 
-            <Link
-              href="/select"
-              className={`
-                inline-block mt-8 px-8 py-3 
-                bg-black text-white rounded-full
-                hover:bg-gray-800 transition-all duration-300
-                ${isHovered ? "transform scale-105" : ""}
-              `}
-              onMouseEnter={() => setIsHovered(true)}
-              onMouseLeave={() => setIsHovered(false)}
-            >
-              <span
-                className={`transition-transform duration-300 ${
-                  isHovered ? "transform -translate-x-1" : ""
-                }`}
-              >
-                Start
-              </span>
-            </Link>
+            <BlackButton href="/select">Start</BlackButton>
           </div>
         </div>
       </div>

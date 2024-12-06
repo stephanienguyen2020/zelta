@@ -14,7 +14,6 @@ interface CharacterCardProps {
   currentIndex: number;
   onNext: () => void;
   onPrevious: () => void;
-  onSelect: () => void;
 }
 
 export default function CharacterCard({
@@ -22,7 +21,6 @@ export default function CharacterCard({
   currentIndex,
   onNext,
   onPrevious,
-  onSelect,
 }: CharacterCardProps) {
   const getCardStyle = (index: number) => {
     const totalCards = characters.length;
@@ -89,7 +87,7 @@ export default function CharacterCard({
           <p className="text-xl sm:text-2xl">
             {characters[currentIndex].description}
           </p>
-          <BlackButton onClick={onSelect}>Select</BlackButton>
+          <BlackButton href="/select">Select</BlackButton>
         </div>
       </div>
     </div>

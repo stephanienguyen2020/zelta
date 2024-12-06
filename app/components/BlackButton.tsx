@@ -1,17 +1,19 @@
 "use client";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 interface BlackButtonProps {
-  onClick: () => void;
+  href: string;
   children: React.ReactNode;
 }
 
-export default function BlackButton({ onClick, children }: BlackButtonProps) {
+export default function BlackButton({ href, children }: BlackButtonProps) {
+  const router = useRouter();
   const [isHovered, setIsHovered] = useState(false);
 
   return (
     <button
-      onClick={onClick}
+      onClick={() => router.push(href)}
       className={`
         inline-block px-6 py-2.5 
         bg-black text-white rounded-full
