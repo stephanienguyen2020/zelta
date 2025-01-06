@@ -1,5 +1,5 @@
 {
-  "name": "Stephaniesadfadsfádfasdf",
+  "name": "Stephanie",
   "email": "stephanie@example.com",
   "birthday": "1995-06-15",
   "location": "San Francisco, CA",

@@ -188,8 +188,8 @@ export default function ProfilePage() {
   
   // Move profile state initialization before useUnsavedChanges
   const [profile, setProfile] = useState<Profile>({
-    name: "Stephanie",
-    email: "stephanie@example.com",
+    name: "Alex Harper",
+    email: " alexharper93@gmail.com",
     birthday: "1995-06-15",
     location: "San Francisco, CA",
     aboutMe: "I'm an adventurous spirit who loves exploring new places and trying new things.",
