@@ -113,3 +113,92 @@ We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) f
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Project Setup Guide
+
+This guide provides detailed instructions for setting up Zelta locally. Follow these steps carefully to ensure proper functionality. (Note that the main app is in the "main_app" directory)
+
+### Prerequisites
+
+- **Python**: Version 3.11.5
+- **Docker**: Latest stable version
+- **Node.js**: Version 16 or higher
+- **Azure Account**: Active subscription for services
+
+### Setup Instructions
+
+1. **Create Python Virtual Environment**
+
+```bash
+python3.11 -m venv env
+```
+
+2. **Activate Virtual Environment**
+
+```bash
+# Linux/MacOS
+source env/bin/activate
+
+# Windows
+.\env\Scripts\activate
+```
+
+3. **Install Python Dependencies**
+
+```bash
+pip install -r requirements.txt
+```
+
+4. **Configure Environment Variables**
+
+```bash
+cp .env.example .env
+# Edit .env with your Azure credentials and configuration
+```
+
+5. **Start Docker Services**
+
+```bash
+docker-compose up -d
+```
+
+6. **Start Backend Server**
+
+```bash
+# From project root
+uvicorn main:app --reload
+```
+
+7. **Install & Start Frontend**
+
+```bash
+# Install dependencies
+npm install
+
+# Start development server
+npm run dev
+```
+
+### Verification Steps
+
+1. Backend API should be running on `http://localhost:8000`
+2. Frontend should be accessible at `http://localhost:3000`
+3. Verify Azure services connectivity through the health check endpoint
+
+### Common Issues
+
+- **Docker Containers**: Ensure all required containers are running
+  ```bash
+  docker ps
+  ```
+- **Database Migrations**: Run if needed
+  ```bash
+  alembic upgrade head
+  ```
+- **Azure Configuration**: Verify all required Azure services are properly configured in `.env`
+
+### Development Notes
+
+- Use `npm run lint` to check code style
+- Run tests with `pytest` for backend and `npm test` for frontend
+- Follow the contribution guidelines when submitting changes
