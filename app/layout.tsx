@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import InteractiveBackground from "./components/InteractiveBackground";
+import GradientBackground from "./components/GradientBackground";
+import { UserAvatar } from "./components/UserAvatar";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -30,7 +32,19 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <InteractiveBackground>
-          {children}
+          <GradientBackground>
+            <div className="fixed top-8 right-8 z-50 flex justify-end">
+              <UserAvatar 
+                src="/images/default-avatar.png"
+                fallback="U"
+                size="md"
+                hasNotification={false}
+              />
+            </div>
+            <main className="relative">
+              {children}
+            </main>
+          </GradientBackground>
         </InteractiveBackground>
       </body>
     </html>
