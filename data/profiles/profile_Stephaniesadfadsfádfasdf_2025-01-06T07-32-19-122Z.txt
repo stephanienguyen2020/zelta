@@ -1,0 +1,73 @@
+{
+  "name": "Stephaniesadfadsfádfasdf",
+  "email": "stephanie@example.com",
+  "birthday": "1995-06-15",
+  "location": "San Francisco, CA",
+  "aboutMe": "I'm an adventurous spirit who loves exploring new places and trying new things.",
+  "lifeGoals": "To travel to at least 30 countries and make a positive impact.",
+  "lookingFor": "A companion who can engage in meaningful conversations.",
+  "communicationStyle": "Deep & Meaningful",
+  "loveLanguage": "Words of Affirmation",
+  "interests": [
+    "Music",
+    "Travel",
+    "Photography",
+    "Cooking"
+  ],
+  "foodPreferences": {
+    "favoriteCuisine": "Italian, Japanese",
+    "dietaryRestrictions": "Vegetarian",
+    "favoriteDishes": "Pasta, Sushi",
+    "foodsToAvoid": "Spicy foods"
+  },
+  "drinkPreferences": {
+    "favoriteBeverages": "Green tea, Craft coffee",
+    "specificPreferences": "No alcohol"
+  },
+  "entertainmentPreferences": {
+    "favoriteMoviesShows": "Documentaries, Sci-fi series",
+    "favoriteGenres": "Mystery, Science Fiction",
+    "favoriteBooks": "Self-development, Fiction",
+    "preferredStreamingPlatforms": "Netflix, Prime Video"
+  },
+  "musicPreferences": {
+    "favoriteArtists": "Various indie artists",
+    "favoriteGenres": "Indie pop, Classical",
+    "playlists": "Morning motivation, Focus music"
+  },
+  "fitnessPreferences": {
+    "favoriteWorkouts": "Yoga, Running",
+    "activityLevel": "Moderately Active",
+    "fitnessGoals": "Maintain healthy lifestyle"
+  },
+  "sleepPreferences": {
+    "usualBedtime": "10:30 PM",
+    "morningOrEvening": "Morning person"
+  },
+  "travelPreferences": {
+    "favoriteDestinations": "Japan, Italy, New Zealand",
+    "travelGoals": "Visit every continent",
+    "travelStyle": "Cultural"
+  },
+  "learningPreferences": {
+    "topicsOfInterest": "Languages, Psychology",
+    "learningStyle": "Visual",
+    "currentlyLearning": "Japanese language"
+  },
+  "socialPreferences": {
+    "preferredActivities": "Small gatherings, Coffee meetups",
+    "socialStyle": "Ambivert",
+    "groupSize": "Small groups (3-5 people)"
+  },
+  "workPreferences": {
+    "careerGoals": "Start own business",
+    "workStyle": "Remote with occasional meetings",
+    "skillsToLearn": "Digital marketing, Public speaking"
+  },
+  "aiPreferences": {
+    "chatStyle": "Friendly",
+    "notificationFrequency": "Daily",
+    "topicsToAvoid": "Politics, Religion",
+    "privacySettings": "Share only necessary information"
+  }
+}

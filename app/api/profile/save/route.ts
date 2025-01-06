@@ -18,14 +18,16 @@ export async function POST(request: Request) {
       fs.mkdirSync(profilesDir, { recursive: true });
     }
 
-    // Remove old profile files for this user
+    // Clear the profiles directory
     const files = fs.readdirSync(profilesDir);
-    files.forEach(file => {
-      if (file.startsWith(`profile_${profile.name}_`)) {
-        fs.unlinkSync(path.join(profilesDir, file));
-        console.log(`Removed old profile file: ${file}`);
-      }
-    });
+    if (files.length > 0) {
+      // Delete all existing files in the directory
+      files.forEach(file => {
+        const filePath = path.join(profilesDir, file);
+        fs.unlinkSync(filePath);
+        console.log(`Removed file: ${file}`);
+      });
+    }
 
     // Save new profile with timestamp
     const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
