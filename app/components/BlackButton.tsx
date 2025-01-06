@@ -3,17 +3,30 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 
 interface BlackButtonProps {
-  href: string;
+  href?: string;
   children: React.ReactNode;
+  onClick?: (e: React.MouseEvent) => void;
 }
 
-export default function BlackButton({ href, children }: BlackButtonProps) {
+export default function BlackButton({
+  href,
+  children,
+  onClick,
+}: BlackButtonProps) {
   const router = useRouter();
   const [isHovered, setIsHovered] = useState(false);
 
+  const handleClick = (e: React.MouseEvent) => {
+    if (onClick) {
+      onClick(e);
+    } else if (href) {
+      router.push(href);
+    }
+  };
+
   return (
     <button
-      onClick={() => router.push(href)}
+      onClick={handleClick}
       className={`
         inline-block px-6 py-2.5 
         bg-black text-white rounded-full

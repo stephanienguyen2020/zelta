@@ -65,4 +65,4 @@ export interface Profile {
     topicsToAvoid: string;
     privacySettings: string;
   };
-} 
+}
