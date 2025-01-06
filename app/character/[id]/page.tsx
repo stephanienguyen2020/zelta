@@ -3,10 +3,10 @@
 import { useParams } from "next/navigation";
 import Image from "next/image";
 import { characters } from "../../data/characters";
-import Logo from "../../components/Logo";
-import GradientBackground from "../../components/GradientBackground";
-import InteractiveBackground from "../../components/InteractiveBackground";
-import BlackButton from "../../components/BlackButton";
+import Logo from "@/app/components/Logo";
+import GradientBackground from "@/app/components/GradientBackground";
+import InteractiveBackground from "@/app/components/InteractiveBackground";
+import BlackButton from "@/app/components/BlackButton";
 
 export const dynamic = "force-dynamic";
 

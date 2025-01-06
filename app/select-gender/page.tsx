@@ -1,6 +1,6 @@
 "use client";
-import Logo from "../components/Logo";
-import GradientBackground from "../components/GradientBackground";
+import Logo from "@/app/components/Logo";
+import GradientBackground from "@/app/components/GradientBackground";
 import Image from "next/image";
 
 export const dynamic = "force-dynamic";

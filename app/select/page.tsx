@@ -2,10 +2,10 @@
 
 import React, { useState } from 'react';
 import { useSearchParams } from 'next/navigation';
-import Logo from "../components/Logo";
-import GradientBackground from "../components/GradientBackground";
-import InteractiveBackground from "../components/InteractiveBackground";
-import CharacterCard from "../components/CharacterCard";
+import Logo from "@/app/components/Logo";
+import GradientBackground from "@/app/components/GradientBackground";
+import InteractiveBackground from "@/app/components/InteractiveBackground";
+import CharacterCard from "@/app/components/CharacterCard";
 import { characters } from "../data/characters";
 
 export default function SelectCharacter() {

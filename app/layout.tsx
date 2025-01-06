@@ -4,6 +4,7 @@ import "./globals.css";
 import InteractiveBackground from "./components/InteractiveBackground";
 import GradientBackground from "./components/GradientBackground";
 import { UserAvatar } from "./components/UserAvatar";
+import { Toaster } from "./components/ui/toaster"
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -33,12 +34,10 @@ export default function RootLayout({
       >
         <InteractiveBackground>
           <GradientBackground>
-            <div className="fixed top-8 right-8 z-50 flex justify-end">
+            <div className="fixed top-8 right-8 z-50">
               <UserAvatar 
-                src="/images/default-avatar.png"
-                fallback="U"
+                src="/images/Stephanie.jpg"
                 size="md"
-                hasNotification={false}
               />
             </div>
             <main className="relative">
@@ -46,6 +45,7 @@ export default function RootLayout({
             </main>
           </GradientBackground>
         </InteractiveBackground>
+        <Toaster />
       </body>
     </html>
   );

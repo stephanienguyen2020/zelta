@@ -1,20 +1,16 @@
 "use client";
 
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import { Avatar, AvatarImage } from "@/app/components/ui/avatar";
 import Link from "next/link";
 
 interface UserAvatarProps {
-  src?: string;
-  fallback?: string;
-  hasNotification?: boolean;
+  src: string;
   size?: "sm" | "md" | "lg";
   className?: string;
 }
 
 export function UserAvatar({
   src,
-  fallback = "U",
-  hasNotification = false,
   size = "md",
   className,
 }: UserAvatarProps) {
@@ -25,20 +21,14 @@ export function UserAvatar({
   };
 
   return (
-    <div className="relative">
-      <div className="inline-block">
-        <Link href="/profile">
-          <Avatar className={`${sizeClasses[size]} cursor-pointer ${className || ""}`}>
-            <AvatarImage src={src} alt="User avatar" />
-            <AvatarFallback className="bg-gray-100 text-gray-600">
-              {fallback}
-            </AvatarFallback>
-          </Avatar>
-        </Link>
-      </div>
-      {hasNotification && (
-        <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-red-500 border-2 border-white" />
-      )}
-    </div>
+    <Link href="/profile" className="block">
+      <Avatar className={`${sizeClasses[size]} cursor-pointer ${className || ""}`}>
+        <AvatarImage 
+          src={src} 
+          alt="User avatar"
+          className="object-cover"
+        />
+      </Avatar>
+    </Link>
   );
 } 

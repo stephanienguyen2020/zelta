@@ -1,8 +1,8 @@
 "use client";
 
 import React from 'react';
-import { UserAvatar } from "./UserAvatar";
-import Logo from "./Logo";
+import { UserAvatar } from "@/app/components/UserAvatar";
+import Logo from "@/app/components/Logo";
 
 export function TopBar() {
   return (
@@ -10,10 +10,8 @@ export function TopBar() {
       <div className="container mx-auto flex items-center justify-between">
         <Logo />
         <UserAvatar 
-          src="/images/default-avatar.png" 
-          fallback="U"
+          src="/images/Stephanie.jpg" 
           size="md"
-          hasNotification={false}
         />
       </div>
     </div>
