@@ -1,35 +1,85 @@
-# Zelta - Your Perfect AI Partner
+# Zelta - Advanced AI Companionship Platform
 
-Zelta is a Next.js application that helps users find and connect with their ideal AI companion. The platform offers a diverse range of AI personalities and creates meaningful relationships through personalized interactions.
+Zelta is an Azure-powered AI application that creates meaningful relationships through personalized interactions. Built on a sophisticated multi-agent architecture, it offers emotionally intelligent companions that learn and evolve with each user.
 
-## Features
+## Core Features
 
-- **Interactive UI**: Dynamic backgrounds and responsive design
-- **Character Selection**: Choose from multiple AI personalities with different traits
-- **Profile Management**: Comprehensive user profile system with preferences for:
+### Intelligent Conversation System (backed by Azure)
+
+- **Multi-Agent Architecture**: Powered by Autogen for dynamic, context-aware interactions
+- **Emotional Intelligence**: Memory-enhanced responses for more human-like interactions
+- **Real-time Awareness**: Time-sensitive responses that maintain conversational relevance
+- **Continuous Learning**: Evolving interactions based on user preferences and habits
+
+### Speech Processing Pipeline
+
+- **Voice Interface**: Advanced speech-to-speech communication
+- **Natural Synthesis**: Azure Speech Services for emotionally expressive responses
+- **Lip Sync**: Rhubarb technology for synchronized facial animations
+- **Immersive Experience**: Lifelike conversational interactions
+
+### Profile Management
+
+- **Comprehensive Preferences**:
   - Personal Information
   - Communication Style
   - Interests & Hobbies
-  - Food & Drink Preferences
-  - Entertainment & Music
+  - Food & Drink
+  - Entertainment
   - Fitness & Lifestyle
   - Travel & Learning
-  - Work & Social Preferences
-- **PDF Export**: Generate detailed profile reports
-- **Real-time Chat**: Connect with your AI partner through an integrated chat interface
-- **Privacy Controls**: Customizable privacy settings and data sharing preferences
+  - Work & Social
+- **Privacy Controls**: Customizable data sharing settings
+- **PDF Export**: Detailed profile reports
+- **RAG Integration**:
+  - Automatic profile ingestion into RAG system
+  - Real-time updates with newest profile data
+  - Automatic cleanup of outdated information
+  - Seamless overwriting of existing fields
+  - Vector-based retrieval for contextual responses
 
-## Tech Stack
+## Technical Architecture
+
+### Backend Stack
+
+- **Cloud Platform**: Azure Services Suite
+- **Database**:
+  - Cosmos DB for PostgreSQL
+  - pgvector for embeddings
+  - Profile vector store with auto-refresh
+- **Search**: Azure AI Search with profile indexing
+- **Storage**: Azure Blob Storage
+- **Speech Services**: Azure Speech Services
+
+### Frontend Stack
 
 - **Framework**: Next.js 15.0
 - **Language**: TypeScript
-- **Styling**: Tailwind CSS
-- **UI Components**:
+- **Styling**:
+  - Tailwind CSS
   - Radix UI
   - Shadcn UI
-- **PDF Generation**: jsPDF
 - **HTTP Client**: Axios
 - **Font**: Geist (Sans & Mono)
+
+### AI Components
+
+- **Agent Framework**: Autogen
+- **Memory System**: RAG (Retrieval Augmented Generation)
+- **Text Processing**: LLMLingua
+- **Emotion Processing**: Custom emotional intelligence layer
+
+## Agent Pipeline
+
+1. **User Proxy**: Initial query handling
+2. **Reformulate Agent**: Context-rich query processing
+3. **Intent Classifier**: Query categorization
+4. **Specialized Agents**:
+   - Document Reading Agent
+   - Web Search Agent
+   - Conversation Agent
+5. **Relationship Consulting**: Response refinement
+6. **Memory Agent**: User information extraction and storage
 
 ## Getting Started
 
@@ -45,23 +95,21 @@ pnpm dev
 bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) to view the application.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Documentation
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+For detailed documentation about:
 
-## Learn More
+- [Agent Architecture](docs/agents.md)
+- [Azure Services Integration](docs/azure-services.md)
+- [Memory System](docs/memory-system.md)
+- [Speech Pipeline](docs/speech-pipeline.md)
 
-To learn more about Next.js, take a look at the following resources:
+## Contributing
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## License
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
