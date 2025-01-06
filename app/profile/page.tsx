@@ -392,39 +392,39 @@ export default function ProfilePage() {
                   <Card className="bg-white/100 backdrop-blur-md border-none">
                     <CardHeader>
                       <CardTitle>Basic Information</CardTitle>
-                      <CardDescription className="text-gray-600">Your personal details</CardDescription>
+                      <CardDescription className="text-black/60">Your personal details</CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-4">
                       <div className="grid gap-2">
-                        <label className="text-sm font-medium text-gray-600">Name</label>
+                        <label className="text-black text-sm font-medium">Name</label>
                         <Input 
                           name="name"
                           disabled={!isEditing}
                           value={profile.name}
                           onChange={handleInputChange}
-                          className="bg-white/20 border-none text-black"
+                          className="bg-white/20 text-black disabled:text-black disabled:opacity-100"
                           placeholder="Your name"
                         />
                       </div>
                       <div className="grid gap-2">
-                        <label className="text-sm font-medium text-gray-600">Birthday</label>
+                        <label className="text-black text-sm font-medium">Birthday</label>
                         <Input 
                           name="birthday"
                           type="date"
                           disabled={!isEditing}
                           value={profile.birthday}
                           onChange={handleInputChange}
-                          className="bg-white/20 border-none text-black"
+                          className="bg-white/20 text-black disabled:text-black disabled:opacity-100"
                         />
                       </div>
                       <div className="grid gap-2">
-                        <label className="text-sm font-medium text-gray-600">Location</label>
+                        <label className="text-black text-sm font-medium">Location</label>
                         <Input 
                           name="location"
                           disabled={!isEditing}
                           value={profile.location}
                           onChange={handleInputChange}
-                          className="bg-white/20 border-none text-black"
+                          className="bg-white/20 text-black disabled:text-black disabled:opacity-100"
                           placeholder="Your location"
                         />
                       </div>
@@ -435,28 +435,28 @@ export default function ProfilePage() {
                   <Card className="bg-white/90 backdrop-blur-md border-none">
                     <CardHeader>
                       <CardTitle>About Me</CardTitle>
-                      <CardDescription className="text-gray-600">Tell us about yourself</CardDescription>
+                      <CardDescription className="text-black/60">Tell us about yourself</CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-4">
                       <div className="grid gap-2">
-                        <label className="text-sm font-medium text-gray-600">Bio</label>
+                        <label className="text-black text-sm font-medium">Bio</label>
                         <Textarea
                           name="aboutMe"
                           disabled={!isEditing}
                           value={profile.aboutMe}
                           onChange={handleInputChange}
-                          className="bg-white/20 border-none text-black min-h-[100px]"
+                          className="bg-white/20 text-black disabled:text-black disabled:opacity-100 min-h-[100px]"
                           placeholder="Share something about yourself"
                         />
                       </div>
                       <div className="grid gap-2">
-                        <label className="text-sm font-medium text-gray-600">Life Goals</label>
+                        <label className="text-black text-sm font-medium">Life Goals</label>
                         <Textarea
                           name="lifeGoals"
                           disabled={!isEditing}
                           value={profile.lifeGoals}
                           onChange={handleInputChange}
-                          className="bg-white/20 border-none text-black"
+                          className="bg-white/20 text-black disabled:text-black disabled:opacity-100"
                           placeholder="What are your life goals?"
                         />
                       </div>
@@ -467,7 +467,7 @@ export default function ProfilePage() {
                   <Card className="bg-white/90 backdrop-blur-md border-none">
                     <CardHeader>
                       <CardTitle>Interests</CardTitle>
-                      <CardDescription className="text-gray-600">Select your interests</CardDescription>
+                      <CardDescription className="text-black/60">Select your interests</CardDescription>
                     </CardHeader>
                     <CardContent>
                       <div className="flex flex-wrap gap-2">
@@ -476,10 +476,10 @@ export default function ProfilePage() {
                             key={interest}
                             variant="secondary"
                             className={`
-                              cursor-pointer transition-all duration-200
+                              cursor-pointer transition-all duration-200 border
                               ${profile.interests.includes(interest) 
-                                ? 'bg-black text-white hover:bg-gray-800' 
-                                : 'bg-white/10 text-gray-600 hover:bg-white/20'
+                                ? 'bg-black text-white hover:bg-gray-800 border-black' 
+                                : 'bg-white/10 text-gray-600 hover:bg-white/20 border-black/50'
                               }
                               ${!isEditing && 'cursor-default'}
                             `}
@@ -493,7 +493,7 @@ export default function ProfilePage() {
                         ))}
                       </div>
                       {isEditing && (
-                        <p className="text-sm text-gray-500 mt-2">
+                        <p className="text-black/60 text-sm mt-2">
                           Click to select/deselect interests
                         </p>
                       )}
@@ -504,17 +504,17 @@ export default function ProfilePage() {
                   <Card className="bg-white/90 backdrop-blur-md border-none">
                     <CardHeader>
                       <CardTitle>Communication Preferences</CardTitle>
-                      <CardDescription className="text-gray-600">How you prefer to interact</CardDescription>
+                      <CardDescription className="text-black/60">How you prefer to interact</CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-4">
                       <div className="grid gap-2">
-                        <label className="text-sm font-medium text-gray-600">Communication Style</label>
+                        <label className="text-black text-sm font-medium">Communication Style</label>
                         <Select
                           disabled={!isEditing}
                           value={profile.communicationStyle}
                           onValueChange={handleSelectChange("communicationStyle")}
                         >
-                          <SelectTrigger className="bg-white/20 border-none text-black">
+                          <SelectTrigger className="bg-white/20 text-black disabled:text-black disabled:opacity-100">
                             <SelectValue placeholder="Select your communication style" />
                           </SelectTrigger>
                           <SelectContent>
@@ -527,13 +527,13 @@ export default function ProfilePage() {
                         </Select>
                       </div>
                       <div className="grid gap-2">
-                        <label className="text-sm font-medium text-gray-600">Love Language</label>
+                        <label className="text-black text-sm font-medium">Love Language</label>
                         <Select
                           disabled={!isEditing}
                           value={profile.loveLanguage}
                           onValueChange={handleSelectChange("loveLanguage")}
                         >
-                          <SelectTrigger className="bg-white/20 border-none text-black">
+                          <SelectTrigger className="bg-white/20 text-black disabled:text-black disabled:opacity-100">
                             <SelectValue placeholder="Select your love language" />
                           </SelectTrigger>
                           <SelectContent>
@@ -552,17 +552,17 @@ export default function ProfilePage() {
                   <Card className="bg-white/90 backdrop-blur-md border-none">
                     <CardHeader>
                       <CardTitle>Lifestyle</CardTitle>
-                      <CardDescription className="text-gray-600">Your daily routines and preferences</CardDescription>
+                      <CardDescription className="text-black/60">Your daily routines and preferences</CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-4">
                       <div className="grid gap-2">
-                        <label className="text-sm font-medium text-gray-600">Activity Level</label>
+                        <label className="text-black text-sm font-medium">Activity Level</label>
                         <Select
                           disabled={!isEditing}
                           value={profile.fitnessPreferences.activityLevel}
                           onValueChange={handleSelectChange("fitnessPreferences.activityLevel")}
                         >
-                          <SelectTrigger className="bg-white/20 border-none text-black">
+                          <SelectTrigger className="bg-white/20 text-black disabled:text-black disabled:opacity-100">
                             <SelectValue placeholder="Select your activity level" />
                           </SelectTrigger>
                           <SelectContent>
@@ -575,13 +575,13 @@ export default function ProfilePage() {
                         </Select>
                       </div>
                       <div className="grid gap-2">
-                        <label className="text-sm font-medium text-gray-600">Social Style</label>
+                        <label className="text-black text-sm font-medium">Social Style</label>
                         <Select
                           disabled={!isEditing}
                           value={profile.socialPreferences.socialStyle}
                           onValueChange={handleSelectChange("socialPreferences.socialStyle")}
                         >
-                          <SelectTrigger className="bg-white/20 border-none text-black">
+                          <SelectTrigger className="bg-white/20 text-black disabled:text-black disabled:opacity-100">
                             <SelectValue placeholder="Select your social style" />
                           </SelectTrigger>
                           <SelectContent>
@@ -600,17 +600,17 @@ export default function ProfilePage() {
                   <Card className="bg-white/90 backdrop-blur-md border-none">
                     <CardHeader>
                       <CardTitle>Learning & Work</CardTitle>
-                      <CardDescription className="text-gray-600">Your professional and educational preferences</CardDescription>
+                      <CardDescription className="text-black/60">Your professional and educational preferences</CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-4">
                       <div className="grid gap-2">
-                        <label className="text-sm font-medium text-gray-600">Learning Style</label>
+                        <label className="text-black text-sm font-medium">Learning Style</label>
                         <Select
                           disabled={!isEditing}
                           value={profile.learningPreferences.learningStyle}
                           onValueChange={handleSelectChange("learningPreferences.learningStyle")}
                         >
-                          <SelectTrigger className="bg-white/20 border-none text-black">
+                          <SelectTrigger className="bg-white/20 text-black disabled:text-black disabled:opacity-100">
                             <SelectValue placeholder="Select your learning style" />
                           </SelectTrigger>
                           <SelectContent>
@@ -623,13 +623,13 @@ export default function ProfilePage() {
                         </Select>
                       </div>
                       <div className="grid gap-2">
-                        <label className="text-sm font-medium text-gray-600">Work Style</label>
+                        <label className="text-black text-sm font-medium">Work Style</label>
                         <Select
                           disabled={!isEditing}
                           value={profile.workPreferences.workStyle}
                           onValueChange={handleSelectChange("workPreferences.workStyle")}
                         >
-                          <SelectTrigger className="bg-white/20 border-none text-black">
+                          <SelectTrigger className="bg-white/20 text-black disabled:text-black disabled:opacity-100">
                             <SelectValue placeholder="Select your work style" />
                           </SelectTrigger>
                           <SelectContent>
@@ -648,11 +648,11 @@ export default function ProfilePage() {
                   <Card className="bg-white/90 backdrop-blur-md border-none">
                     <CardHeader>
                       <CardTitle>Food & Drink</CardTitle>
-                      <CardDescription className="text-gray-600">Your culinary preferences</CardDescription>
+                      <CardDescription className="text-black/60">Your culinary preferences</CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-4">
                       <div className="grid gap-2">
-                        <label className="text-sm font-medium text-gray-600">Favorite Cuisines</label>
+                        <label className="text-black text-sm font-medium">Favorite Cuisines</label>
                         <div className="flex flex-wrap gap-2">
                           {availableCuisines.map((cuisine) => {
                             const selectedCuisines = profile.foodPreferences.favoriteCuisine
@@ -664,10 +664,10 @@ export default function ProfilePage() {
                                 key={cuisine}
                                 variant="secondary"
                                 className={`
-                                  cursor-pointer transition-all duration-200
+                                  cursor-pointer transition-all duration-200 border
                                   ${selectedCuisines.includes(cuisine)
-                                    ? 'bg-black text-white hover:bg-gray-800' 
-                                    : 'bg-white/10 text-gray-600 hover:bg-white/20'
+                                    ? 'bg-black text-white hover:bg-gray-800 border-black' 
+                                    : 'bg-white/10 text-gray-600 hover:bg-white/20 border-black/50'
                                   }
                                   ${!isEditing && 'cursor-default'}
                                 `}
@@ -682,30 +682,30 @@ export default function ProfilePage() {
                           })}
                         </div>
                         {isEditing && (
-                          <p className="text-sm text-gray-500 mt-2">
+                          <p className="text-black/60 text-sm mt-2">
                             Click to select/deselect cuisines
                           </p>
                         )}
                       </div>
                       <div className="grid gap-2">
-                        <label className="text-sm font-medium text-gray-600">Dietary Restrictions</label>
+                        <label className="text-black text-sm font-medium">Dietary Restrictions</label>
                         <Input
                           name="foodPreferences.dietaryRestrictions"
                           disabled={!isEditing}
                           value={profile.foodPreferences.dietaryRestrictions}
                           onChange={handleInputChange}
-                          className="bg-white/20 border-none text-black"
+                          className="bg-white/20 text-black disabled:text-black disabled:opacity-100"
                           placeholder="Any dietary restrictions?"
                         />
                       </div>
                       <div className="grid gap-2">
-                        <label className="text-sm font-medium text-gray-600">Favorite Beverages</label>
+                        <label className="text-black text-sm font-medium">Favorite Beverages</label>
                         <Input
                           name="drinkPreferences.favoriteBeverages"
                           disabled={!isEditing}
                           value={profile.drinkPreferences.favoriteBeverages}
                           onChange={handleInputChange}
-                          className="bg-white/20 border-none text-black"
+                          className="bg-white/20 text-black disabled:text-black disabled:opacity-100"
                           placeholder="What do you like to drink?"
                         />
                       </div>
@@ -716,39 +716,39 @@ export default function ProfilePage() {
                   <Card className="bg-white/90 backdrop-blur-md border-none">
                     <CardHeader>
                       <CardTitle>Entertainment</CardTitle>
-                      <CardDescription className="text-gray-600">Your entertainment preferences</CardDescription>
+                      <CardDescription className="text-black/60">Your entertainment preferences</CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-4">
                       <div className="grid gap-2">
-                        <label className="text-sm font-medium text-gray-600">Favorite Movies & Shows</label>
+                        <label className="text-black text-sm font-medium">Favorite Movies & Shows</label>
                         <Textarea
                           name="entertainmentPreferences.favoriteMoviesShows"
                           disabled={!isEditing}
                           value={profile.entertainmentPreferences.favoriteMoviesShows}
                           onChange={handleInputChange}
-                          className="bg-white/20 border-none text-black"
+                          className="bg-white/20 text-black disabled:text-black disabled:opacity-100"
                           placeholder="What do you like to watch?"
                         />
                       </div>
                       <div className="grid gap-2">
-                        <label className="text-sm font-medium text-gray-600">Favorite Books</label>
+                        <label className="text-black text-sm font-medium">Favorite Books</label>
                         <Textarea
                           name="entertainmentPreferences.favoriteBooks"
                           disabled={!isEditing}
                           value={profile.entertainmentPreferences.favoriteBooks}
                           onChange={handleInputChange}
-                          className="bg-white/20 border-none text-black"
+                          className="bg-white/20 text-black disabled:text-black disabled:opacity-100"
                           placeholder="What do you like to read?"
                         />
                       </div>
                       <div className="grid gap-2">
-                        <label className="text-sm font-medium text-gray-600">Music Preferences</label>
+                        <label className="text-black text-sm font-medium">Music Preferences</label>
                         <Textarea
                           name="musicPreferences.favoriteGenres"
                           disabled={!isEditing}
                           value={profile.musicPreferences.favoriteGenres}
                           onChange={handleInputChange}
-                          className="bg-white/20 border-none text-black"
+                          className="bg-white/20 text-black disabled:text-black disabled:opacity-100"
                           placeholder="What music do you enjoy?"
                         />
                       </div>
@@ -759,28 +759,28 @@ export default function ProfilePage() {
                   <Card className="bg-white/100 backdrop-blur-md border-none">
                     <CardHeader>
                       <CardTitle>Travel</CardTitle>
-                      <CardDescription className="text-gray-600">Your travel preferences and aspirations</CardDescription>
+                      <CardDescription className="text-black/60">Your travel preferences and aspirations</CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-4">
                       <div className="grid gap-2">
-                        <label className="text-sm font-medium text-gray-600">Favorite Destinations</label>
+                        <label className="text-black text-sm font-medium">Favorite Destinations</label>
                         <Textarea
                           name="travelPreferences.favoriteDestinations"
                           disabled={!isEditing}
                           value={profile.travelPreferences.favoriteDestinations}
                           onChange={handleInputChange}
-                          className="bg-white/20 border-none text-black"
+                          className="bg-white/20 text-black disabled:text-black disabled:opacity-100"
                           placeholder="Where have you enjoyed traveling?"
                         />
                       </div>
                       <div className="grid gap-2">
-                        <label className="text-sm font-medium text-gray-600">Travel Goals</label>
+                        <label className="text-black text-sm font-medium">Travel Goals</label>
                         <Textarea
                           name="travelPreferences.travelGoals"
                           disabled={!isEditing}
                           value={profile.travelPreferences.travelGoals}
                           onChange={handleInputChange}
-                          className="bg-white/20 border-none text-black"
+                          className="bg-white/20 text-black disabled:text-black disabled:opacity-100"
                           placeholder="Where would you like to go?"
                         />
                       </div>
@@ -791,17 +791,17 @@ export default function ProfilePage() {
                   <Card className="bg-white/100 backdrop-blur-md border-none">
                     <CardHeader>
                       <CardTitle>Sleep & Daily Routine</CardTitle>
-                      <CardDescription className="text-gray-600">Your sleep and daily schedule preferences</CardDescription>
+                      <CardDescription className="text-black/60">Your sleep and daily schedule preferences</CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-4">
                       <div className="grid gap-2">
-                        <label className="text-sm font-medium text-gray-600">Sleep Schedule</label>
+                        <label className="text-black text-sm font-medium">Sleep Schedule</label>
                         <Select
                           disabled={!isEditing}
                           value={profile.sleepPreferences.morningOrEvening}
                           onValueChange={handleSelectChange("sleepPreferences.morningOrEvening")}
                         >
-                          <SelectTrigger className="bg-white/20 border-none text-black">
+                          <SelectTrigger className="bg-white/20 text-black disabled:text-black disabled:opacity-100">
                             <SelectValue placeholder="Select your sleep schedule" />
                           </SelectTrigger>
                           <SelectContent>
@@ -814,14 +814,14 @@ export default function ProfilePage() {
                         </Select>
                       </div>
                       <div className="grid gap-2">
-                        <label className="text-sm font-medium text-gray-600">Usual Bedtime</label>
+                        <label className="text-black text-sm font-medium">Usual Bedtime</label>
                         <Input
                           type="time"
                           name="sleepPreferences.usualBedtime"
                           disabled={!isEditing}
                           value={profile.sleepPreferences.usualBedtime}
                           onChange={handleInputChange}
-                          className="bg-white/20 border-none text-black"
+                          className="bg-white/20 text-black disabled:text-black disabled:opacity-100"
                         />
                       </div>
                     </CardContent>
@@ -831,17 +831,17 @@ export default function ProfilePage() {
                   <Card className="bg-white/100 backdrop-blur-md border-none">
                     <CardHeader>
                       <CardTitle>AI Interaction</CardTitle>
-                      <CardDescription className="text-gray-600">How you prefer to interact with your AI companion</CardDescription>
+                      <CardDescription className="text-black/60">How you prefer to interact with your AI companion</CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-4">
                       <div className="grid gap-2">
-                        <label className="text-sm font-medium text-gray-600">Chat Style</label>
+                        <label className="text-black text-sm font-medium">Chat Style</label>
                         <Select
                           disabled={!isEditing}
                           value={profile.aiPreferences.chatStyle}
                           onValueChange={handleSelectChange("aiPreferences.chatStyle")}
                         >
-                          <SelectTrigger className="bg-white/20 border-none text-black">
+                          <SelectTrigger className="bg-white/20 text-black disabled:text-black disabled:opacity-100">
                             <SelectValue placeholder="Select preferred chat style" />
                           </SelectTrigger>
                           <SelectContent>
@@ -854,13 +854,13 @@ export default function ProfilePage() {
                         </Select>
                       </div>
                       <div className="grid gap-2">
-                        <label className="text-sm font-medium text-gray-600">Notification Frequency</label>
+                        <label className="text-black text-sm font-medium">Notification Frequency</label>
                         <Select
                           disabled={!isEditing}
                           value={profile.aiPreferences.notificationFrequency}
                           onValueChange={handleSelectChange("aiPreferences.notificationFrequency")}
                         >
-                          <SelectTrigger className="bg-white/20 border-none text-black">
+                          <SelectTrigger className="bg-white/20 text-black disabled:text-black disabled:opacity-100">
                             <SelectValue placeholder="Select notification frequency" />
                           </SelectTrigger>
                           <SelectContent>
@@ -873,13 +873,13 @@ export default function ProfilePage() {
                         </Select>
                       </div>
                       <div className="grid gap-2">
-                        <label className="text-sm font-medium text-gray-600">Topics to Avoid</label>
+                        <label className="text-black text-sm font-medium">Topics to Avoid</label>
                         <Textarea
                           name="aiPreferences.topicsToAvoid"
                           disabled={!isEditing}
                           value={profile.aiPreferences.topicsToAvoid}
                           onChange={handleInputChange}
-                          className="bg-white/20 border-none text-black"
+                          className="bg-white/20 text-black disabled:text-black disabled:opacity-100"
                           placeholder="Topics you'd prefer not to discuss"
                         />
                       </div>
@@ -890,17 +890,17 @@ export default function ProfilePage() {
                   <Card className="bg-white/100 backdrop-blur-md border-none">
                     <CardHeader>
                       <CardTitle>Privacy Settings</CardTitle>
-                      <CardDescription className="text-gray-600">Control your data and privacy preferences</CardDescription>
+                      <CardDescription className="text-black/60">Control your data and privacy preferences</CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-4">
                       <div className="grid gap-2">
-                        <label className="text-sm font-medium text-gray-600">Privacy Level</label>
+                        <label className="text-black text-sm font-medium">Privacy Level</label>
                         <Select
                           disabled={!isEditing}
                           value={profile.aiPreferences.privacySettings}
                           onValueChange={handleSelectChange("aiPreferences.privacySettings")}
                         >
-                          <SelectTrigger className="bg-white/20 border-none text-black">
+                          <SelectTrigger className="bg-white/20 text-black disabled:text-black disabled:opacity-100">
                             <SelectValue placeholder="Select privacy level" />
                           </SelectTrigger>
                           <SelectContent>
@@ -913,13 +913,13 @@ export default function ProfilePage() {
                         </Select>
                       </div>
                       <div className="grid gap-2">
-                        <label className="text-sm font-medium text-gray-600">Data Sharing Preferences</label>
+                        <label className="text-black text-sm font-medium">Data Sharing Preferences</label>
                         <Textarea
                           name="aiPreferences.privacySettings"
                           disabled={!isEditing}
                           value={profile.aiPreferences.privacySettings}
                           onChange={handleInputChange}
-                          className="bg-white/20 border-none text-black"
+                          className="bg-white/20 text-black disabled:text-black disabled:opacity-100"
                           placeholder="Specify your data sharing preferences"
                         />
                       </div>
