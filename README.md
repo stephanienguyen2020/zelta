@@ -2,23 +2,51 @@
 
 Zelta is an Azure-powered AI application that creates meaningful relationships through personalized interactions. Built on a sophisticated multi-agent architecture, it offers emotionally intelligent companions that learn and evolve with each user.
 
-## Core Features
+## :card_index_dividers: Project Structure
+```
+.
+.
+.
+├── app/
+├── data/
+├── hooks/
+├── lib/
+├── main_app/
+│   ├── app/                            # Backend folder
+│   │   ├── assistance/                 # Agents
+│   │   ├── ...
+│   │   ├── routers/                    # Backend Routers
+│   │   ├── utils/                      # contains utilities like working with Azure AI Search, etc.
+│   ├── main.py
+│   ├── requirements.txt                # required dependencies for back-end
+│   ├── OAI_CONFIG_LIST.json.sample     # sample Azure OpenAI configurations
+│   ├── .env.sample                     # sample environment variables for back-end
+│   ├── frontend/
+│   │   ├── public/
+│   │   ├── src/
+│   │   └── package.json
+├── public/
+├── README.md
+├── types/
 
-### Intelligent Conversation System (backed by Azure)
+```
+## :rocket: Core Features
 
-- **Multi-Agent Architecture**: Powered by Autogen for dynamic, context-aware interactions
+### :toolbox: Intelligent Conversation System (backed by Azure OpenAI Service)
+
+- **Multi-Agent Architecture**: Powered by Autogen and Azure OpenAI Service for dynamic, context-aware interactions
 - **Emotional Intelligence**: Memory-enhanced responses for more human-like interactions
 - **Real-time Awareness**: Time-sensitive responses that maintain conversational relevance
 - **Continuous Learning**: Evolving interactions based on user preferences and habits
 
-### Speech Processing Pipeline
+### :speech_balloon: Speech Processing Pipeline
 
 - **Voice Interface**: Advanced speech-to-speech communication
 - **Natural Synthesis**: Azure Speech Services for emotionally expressive responses
 - **Lip Sync**: Rhubarb technology for synchronized facial animations
 - **Immersive Experience**: Lifelike conversational interactions
 
-### Profile Management
+### :cupid: Profile Management
 
 - **Comprehensive Preferences**:
   - Personal Information
@@ -38,20 +66,18 @@ Zelta is an Azure-powered AI application that creates meaningful relationships t
   - Seamless overwriting of existing fields
   - Vector-based retrieval for contextual responses
 
-## Technical Architecture
+## :rocket: Technical Architecture
 
-### Backend Stack
+### :toolbox: Backend Stack
 
-- **Cloud Platform**: Azure Services Suite
-- **Database**:
-  - Cosmos DB for PostgreSQL
-  - pgvector for embeddings
-  - Profile vector store with auto-refresh
-- **Search**: Azure AI Search with profile indexing
-- **Storage**: Azure Blob Storage
+- **Database & Storage**:
+  - Azure Cosmos DB for PostgreSQL with PGVector for retrieval of vector embeddings
+  - Azure AI Search index and Azure Blob Storage for user information and uploaded documents
+- **Search**: Azure AI Search with profile indexing for semantic search
 - **Speech Services**: Azure Speech Services
+- **Documents text extractions**: Azure AI Document Intelligence
 
-### Frontend Stack
+### :desktop_computer: Frontend Stack
 
 - **Framework**: Next.js 15.0
 - **Language**: TypeScript
@@ -62,26 +88,26 @@ Zelta is an Azure-powered AI application that creates meaningful relationships t
 - **HTTP Client**: Axios
 - **Font**: Geist (Sans & Mono)
 
-### AI Components
+### :robot: AI Components
 
-- **Agent Framework**: Autogen
-- **Memory System**: RAG (Retrieval Augmented Generation)
-- **Text Processing**: LLMLingua
-- **Emotion Processing**: Custom emotional intelligence layer
+- **Multi-Agent AI**: Built on **Autogen** backed by **Azure OpenAI Service**, enabling seamless collaboration between specialized agents for query reformulation, intent classification, and response generation.
+- **Memory System**: Incorporates **Retrieval-Augmented Generation (RAG)** to store and retrieve user-specific data, ensuring personalized and context-aware responses.
+- **Text Processing and Compression**: Powered by **LLMLingua**, optimizing chat history management and prompt generation for efficiency.
+- **Emotion Processing**: Includes a custom emotional intelligence layer with **Relationship Consulting agent** to analyze and respond empathetically to user inputs.
 
-## Agent Pipeline
+## :rocket: Multi-Agents Pipeline
 
 1. **User Proxy**: Initial query handling
 2. **Reformulate Agent**: Context-rich query processing
-3. **Intent Classifier**: Query categorization
+3. **Intent Classifier**: Semantic routers to identify user's intent
 4. **Specialized Agents**:
    - Document Reading Agent
    - Web Search Agent
    - Conversation Agent
-5. **Relationship Consulting**: Response refinement
+5. **Relationship Consulting Agent**: Response refinement
 6. **Memory Agent**: User information extraction and storage
 
-## Getting Started
+## :rocket: Getting Started
 
 1. Clone the repository:
 
@@ -97,7 +123,7 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) to view the application.
 
-## Documentation
+## :rocket: Documentation
 
 For detailed documentation about:
 
@@ -106,26 +132,26 @@ For detailed documentation about:
 - [Memory System](docs/memory-system.md)
 - [Speech Pipeline](docs/speech-pipeline.md)
 
-## Contributing
+## :rocket: Contributing
 
 We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details.
 
-## License
+## :rocket: License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## Project Setup Guide
+## :rocket: Project Setup Guide
 
 This guide provides detailed instructions for setting up Zelta locally. Follow these steps carefully to ensure proper functionality. (Note that the main app is in the "main_app" directory)
 
-### Prerequisites
+### :computer: Prerequisites
 
 - **Python**: Version 3.11.5
 - **Docker**: Latest stable version
 - **Node.js**: Version 16 or higher
-- **Azure Account**: Active subscription for services
+- **Azure Account**: Active subscription for services (including Azure OpenAI Service, Azure AI Search, Azure Cosmos DB, Azure AI Document Intelligence, Azure Blob Storage, etc.)
 
-### Setup Instructions
+### :building_construction: Setup Instructions
 
 1. **Create Python Virtual Environment**
 
@@ -143,33 +169,38 @@ source env/bin/activate
 .\env\Scripts\activate
 ```
 
-3. **Install Python Dependencies**
+3. **Navigate into the project directory:**
+```bash
+cd main_app
+```
+
+4. **Install Python Dependencies**
 
 ```bash
 pip install -r requirements.txt
 ```
 
-4. **Configure Environment Variables**
+5. **Configure Environment Variables**
 
 ```bash
-cp .env.example .env
-# Edit .env with your Azure credentials and configuration
+cp .env.sample .env
+# Edit .env with your Azure credentials and configurations
 ```
 
-5. **Start Docker Services**
+6. **Optional: Start Docker Services for local Database PostgreSQL setup**
 
 ```bash
 docker-compose up -d
 ```
 
-6. **Start Backend Server**
+7. **Start Backend Server**
 
 ```bash
 # From project root
 uvicorn main:app --reload
 ```
 
-7. **Install & Start Frontend**
+8. **Install & Start Frontend**
 
 ```bash
 # Install dependencies
@@ -178,27 +209,3 @@ npm install
 # Start development server
 npm run dev
 ```
-
-### Verification Steps
-
-1. Backend API should be running on `http://localhost:8000`
-2. Frontend should be accessible at `http://localhost:3000`
-3. Verify Azure services connectivity through the health check endpoint
-
-### Common Issues
-
-- **Docker Containers**: Ensure all required containers are running
-  ```bash
-  docker ps
-  ```
-- **Database Migrations**: Run if needed
-  ```bash
-  alembic upgrade head
-  ```
-- **Azure Configuration**: Verify all required Azure services are properly configured in `.env`
-
-### Development Notes
-
-- Use `npm run lint` to check code style
-- Run tests with `pytest` for backend and `npm test` for frontend
-- Follow the contribution guidelines when submitting changes
