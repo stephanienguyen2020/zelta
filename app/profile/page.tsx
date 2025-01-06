@@ -277,15 +277,39 @@ export default function ProfilePage() {
     }));
   };
 
+  const saveProfileToAPI = async (profileData: Profile) => {
+    try {
+      const response = await fetch('/api/profile/save', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(profileData),
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to save profile');
+      }
+      
+      const data = await response.json();
+      return data.success;
+    } catch (error) {
+      console.error('Error saving profile:', error);
+      return false;
+    }
+  };
+
   const debouncedSave = useCallback(
-    debounce<Profile>((newProfile: Profile) => {
+    debounce<Profile>(async (newProfile: Profile) => {
       console.log("Autosaving profile:", newProfile);
       toast({
         title: "Changes Saved",
         duration: 2000,
         className: "w-[180px]",
       });
-      // After 2 seconds, revert all edit states
+      // Save to API in the background
+      await saveProfileToAPI(newProfile);
+      
       setTimeout(() => {
         setEditingSections(prev => {
           const newState = { ...prev };
@@ -328,7 +352,7 @@ export default function ProfilePage() {
   );
 
   // Update the handleSave function to handle both global and section saves
-  const handleSave = useCallback((section?: SectionName) => {
+  const handleSave = useCallback(async (section?: SectionName) => {
     if (section) {
       setEditingSections(prev => ({
         ...prev,
@@ -339,6 +363,8 @@ export default function ProfilePage() {
         duration: 2000,
         className: "w-[180px]",
       });
+      // Save to API in the background
+      await saveProfileToAPI(profile);
     } else {
       setEditingSections({
         basic: false,
@@ -360,8 +386,10 @@ export default function ProfilePage() {
         duration: 2000,
         className: "w-[180px]",
       });
+      // Save to API in the background
+      await saveProfileToAPI(profile);
     }
-  }, []);
+  }, [profile]);
 
   const handleSelectChange = (name: string) => (value: string) => {
     const keys = name.split('.');
