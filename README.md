@@ -1,8 +1,39 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Zelta - Your Perfect AI Partner
+
+Zelta is a Next.js application that helps users find and connect with their ideal AI companion. The platform offers a diverse range of AI personalities and creates meaningful relationships through personalized interactions.
+
+## Features
+
+- **Interactive UI**: Dynamic backgrounds and responsive design
+- **Character Selection**: Choose from multiple AI personalities with different traits
+- **Profile Management**: Comprehensive user profile system with preferences for:
+  - Personal Information
+  - Communication Style
+  - Interests & Hobbies
+  - Food & Drink Preferences
+  - Entertainment & Music
+  - Fitness & Lifestyle
+  - Travel & Learning
+  - Work & Social Preferences
+- **PDF Export**: Generate detailed profile reports
+- **Real-time Chat**: Connect with your AI partner through an integrated chat interface
+- **Privacy Controls**: Customizable privacy settings and data sharing preferences
+
+## Tech Stack
+
+- **Framework**: Next.js 15.0
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS
+- **UI Components**:
+  - Radix UI
+  - Shadcn UI
+- **PDF Generation**: jsPDF
+- **HTTP Client**: Axios
+- **Font**: Geist (Sans & Mono)
 
 ## Getting Started
 
-First, run the development server:
+1. Clone the repository:
 
 ```bash
 npm run dev

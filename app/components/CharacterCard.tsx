@@ -22,7 +22,6 @@ export default function CharacterCard({
   onNext,
   onPrevious,
 }: CharacterCardProps) {
-
   const getCardStyle = (index: number) => {
     const totalCards = characters.length;
     let position = index - currentIndex;
@@ -44,24 +43,24 @@ export default function CharacterCard({
   };
 
   const getCharacterImage = (name: string) => {
-    const baseName = name.split(' ')[0].toLowerCase();
+    const baseName = name.split(" ")[0].toLowerCase();
     switch (baseName) {
       // Male characters
-      case 'alex':
-        return '/images/Alex.svg';
-      case 'sam':
-        return '/images/Sam.svg';
-      case 'jordan':
-        return '/images/Jordan.svg';
+      case "alex":
+        return "/images/Alex.svg";
+      case "sam":
+        return "/images/Sam.svg";
+      case "jordan":
+        return "/images/Jordan.svg";
       // Female characters
-      case 'emma':
-        return '/images/Emma.svg';
-      case 'sophie':
-        return '/images/Sophie.svg';
-      case 'olivia':
-        return '/images/Olivia.svg';
+      case "emma":
+        return "/images/Emma.svg";
+      case "sophie":
+        return "/images/Sophie.svg";
+      case "olivia":
+        return "/images/Olivia.svg";
       default:
-        return '/images/placeholder_image.png';
+        return "/images/placeholder_image.png";
     }
   };
 
