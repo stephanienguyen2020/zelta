@@ -1,6 +1,6 @@
 "use client";
 
-import { Pencil, Save, X } from "lucide-react";
+import { Pencil, Save } from "lucide-react";
 import { useState, useCallback } from 'react';
 import GradientBackground from "@/app/components/GradientBackground";
 import InteractiveBackground from "@/app/components/InteractiveBackground";
@@ -12,6 +12,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/app
 import { Badge } from "@/app/components/ui/badge";
 import { toast } from "@/app/components/ui/use-toast";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/app/components/ui/select";
+import { debounce } from "@/app/lib/debounce";
 
 const availableInterests = [
   "Reading",
@@ -140,7 +141,7 @@ const validateField = (name: string, value: string): string | null => {
   }
 };
 
-// Add new section for handling unsaved changes
+// Add back the useUnsavedChanges hook
 const useUnsavedChanges = (initialProfile: Profile) => {
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
   
@@ -152,9 +153,38 @@ const useUnsavedChanges = (initialProfile: Profile) => {
   return { hasUnsavedChanges, checkChanges };
 };
 
+// First, add a type for the section names
+type SectionName = 
+  | 'basic'
+  | 'about'
+  | 'interests'
+  | 'communication'
+  | 'lifestyle'
+  | 'learning'
+  | 'food'
+  | 'entertainment'
+  | 'travel'
+  | 'sleep'
+  | 'ai'
+  | 'privacy';
+
 export default function ProfilePage() {
   const [isEditing, setIsEditing] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [editingSections, setEditingSections] = useState<Record<SectionName, boolean>>({
+    basic: false,
+    about: false,
+    interests: false,
+    communication: false,
+    lifestyle: false,
+    learning: false,
+    food: false,
+    entertainment: false,
+    travel: false,
+    sleep: false,
+    ai: false,
+    privacy: false
+  });
   
   // Move profile state initialization before useUnsavedChanges
   const [profile, setProfile] = useState<Profile>({
@@ -226,7 +256,7 @@ export default function ProfilePage() {
     }
   });
 
-  // Now we can use profile in useUnsavedChanges
+  // Add the useUnsavedChanges hook usage
   const { hasUnsavedChanges, checkChanges } = useUnsavedChanges(profile);
 
   // Move toggleInterest inside the component
@@ -239,6 +269,36 @@ export default function ProfilePage() {
     }));
   };
 
+  // Update the handleSectionEdit function
+  const handleSectionEdit = (section: SectionName) => {
+    setEditingSections(prev => ({
+      ...prev,
+      [section]: true
+    }));
+  };
+
+  const debouncedSave = useCallback(
+    debounce<Profile>((newProfile: Profile) => {
+      console.log("Autosaving profile:", newProfile);
+      toast({
+        title: "Changes Saved",
+        duration: 2000,
+        className: "w-[180px]",
+      });
+      // After 2 seconds, revert all edit states
+      setTimeout(() => {
+        setEditingSections(prev => {
+          const newState = { ...prev };
+          Object.keys(newState).forEach(key => {
+            newState[key as SectionName] = false;
+          });
+          return newState;
+        });
+      }, 500);
+    }, 1500),
+    []
+  );
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     const error = validateField(name, value);
@@ -248,74 +308,60 @@ export default function ProfilePage() {
       [name]: error || ''
     }));
 
-    setProfile(prev => {
-      const updated = { ...prev, [name]: value };
-      checkChanges(updated);
-      return updated;
-    });
+    const updatedProfile = { ...profile, [name]: value };
+    setProfile(updatedProfile);
+    checkChanges(updatedProfile);
+    debouncedSave(updatedProfile);
   };
 
-  const handleSave = () => {
-    // Validate all fields before saving
-    const newErrors: Record<string, string> = {};
-    Object.entries(profile).forEach(([key, value]) => {
-      if (typeof value === 'string') {
-        const error = validateField(key, value);
-        if (error) newErrors[key] = error;
-      }
-    });
-
-    if (Object.keys(newErrors).length > 0) {
-      setErrors(newErrors);
-      toast({
-        title: "Validation Error",
-        description: "Please fix the errors before saving",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    setIsEditing(false);
-    toast({
-      title: "Profile Updated",
-      description: "Your changes have been saved successfully.",
-    });
-  };
-
-  const handleCancel = () => {
-    if (hasUnsavedChanges) {
-      // Show confirmation dialog
-      const confirm = window.confirm("You have unsaved changes. Are you sure you want to cancel?");
-      if (!confirm) return;
-    }
-    setIsEditing(false);
-    setErrors({});
-  };
-
-  // Add the edit/save buttons with proper styling
-  const ActionButton = () => (
+  // Update the SaveButton component
+  const SaveButton = ({ section }: { section?: SectionName }) => (
     <Button
-      variant={isEditing ? "destructive" : "secondary"}
-      size="icon"
-      onClick={() => isEditing ? handleCancel() : setIsEditing(true)}
-      className="bg-white hover:bg-gray-100 text-gray-800"
-    >
-      {isEditing ? <X className="h-4 w-4" /> : <Pencil className="h-4 w-4" />}
-    </Button>
-  );
-
-  // Add the save button with loading state
-  const SaveButton = () => (
-    <Button
-      onClick={handleSave}
+      onClick={() => handleSave(section)}
       variant="default"
-      className="bg-black hover:bg-gray-800 text-white gap-2"
+      size="icon"
+      className="h-8 w-8 bg-black hover:bg-gray-800"
       disabled={Object.keys(errors).length > 0}
     >
-      <Save className="h-4 w-4" />
-      Save Changes
+      <Save className="h-4 w-4 text-white" />
     </Button>
   );
+
+  // Update the handleSave function to handle both global and section saves
+  const handleSave = useCallback((section?: SectionName) => {
+    if (section) {
+      setEditingSections(prev => ({
+        ...prev,
+        [section]: false
+      }));
+      toast({
+        title: "Changes Saved",
+        duration: 2000,
+        className: "w-[180px]",
+      });
+    } else {
+      setEditingSections({
+        basic: false,
+        about: false,
+        interests: false,
+        communication: false,
+        lifestyle: false,
+        learning: false,
+        food: false,
+        entertainment: false,
+        travel: false,
+        sleep: false,
+        ai: false,
+        privacy: false
+      });
+      setIsEditing(false);
+      toast({
+        title: "Changes Saved",
+        duration: 2000,
+        className: "w-[180px]",
+      });
+    }
+  }, []);
 
   const handleSelectChange = (name: string) => (value: string) => {
     const keys = name.split('.');
@@ -370,36 +416,43 @@ export default function ProfilePage() {
             <div className="flex items-center gap-8">
               <Logo />
               <h1 className="text-2xl sm:text-3xl text-black">
-                Profile
+                Your Profile
               </h1>
-            </div>
-            <div className="flex items-center gap-4">
-              <ActionButton />
-              {isEditing && <SaveButton />}
             </div>
           </div>
 
           <div className="max-w-2xl mx-auto">
             <Card className="bg-white/5 backdrop-blur-md border-none shadow-lg">
-              <CardHeader>
-                <CardTitle className="text-center text-2xl font-medium text-black">
-                  Your Profile
-                </CardTitle>
-              </CardHeader>
               <CardContent className="space-y-6">
                 <div className="space-y-6">
                   {/* Basic Information */}
                   <Card className="bg-white/100 backdrop-blur-md border-none">
-                    <CardHeader>
-                      <CardTitle>Basic Information</CardTitle>
-                      <CardDescription className="text-black/60">Your personal details</CardDescription>
+                    <CardHeader className="flex flex-row items-center justify-between">
+                      <div>
+                        <CardTitle>Basic Information</CardTitle>
+                        <CardDescription className="text-black/60">Your personal details</CardDescription>
+                      </div>
+                      <div className="flex gap-2">
+                        {editingSections.basic ? (
+                          <SaveButton section="basic" />
+                        ) : (
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => handleSectionEdit('basic')}
+                            className="h-8 w-8"
+                          >
+                            <Pencil className="h-4 w-4" />
+                          </Button>
+                        )}
+                      </div>
                     </CardHeader>
                     <CardContent className="space-y-4">
                       <div className="grid gap-2">
                         <label className="text-black text-sm font-medium">Name</label>
                         <Input 
                           name="name"
-                          disabled={!isEditing}
+                          disabled={!editingSections.basic}
                           value={profile.name}
                           onChange={handleInputChange}
                           className="bg-white/20 text-black disabled:text-black disabled:opacity-100"
@@ -411,7 +464,7 @@ export default function ProfilePage() {
                         <Input 
                           name="birthday"
                           type="date"
-                          disabled={!isEditing}
+                          disabled={!editingSections.basic}
                           value={profile.birthday}
                           onChange={handleInputChange}
                           className="bg-white/20 text-black disabled:text-black disabled:opacity-100"
@@ -421,7 +474,7 @@ export default function ProfilePage() {
                         <label className="text-black text-sm font-medium">Location</label>
                         <Input 
                           name="location"
-                          disabled={!isEditing}
+                          disabled={!editingSections.basic}
                           value={profile.location}
                           onChange={handleInputChange}
                           className="bg-white/20 text-black disabled:text-black disabled:opacity-100"
@@ -433,16 +486,32 @@ export default function ProfilePage() {
 
                   {/* About Me */}
                   <Card className="bg-white/90 backdrop-blur-md border-none">
-                    <CardHeader>
-                      <CardTitle>About Me</CardTitle>
-                      <CardDescription className="text-black/60">Tell us about yourself</CardDescription>
+                    <CardHeader className="flex flex-row items-center justify-between">
+                      <div>
+                        <CardTitle>About Me</CardTitle>
+                        <CardDescription className="text-black/60">Tell us about yourself</CardDescription>
+                      </div>
+                      <div className="flex gap-2">
+                        {editingSections.about ? (
+                          <SaveButton section="about" />
+                        ) : (
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => handleSectionEdit('about')}
+                            className="h-8 w-8"
+                          >
+                            <Pencil className="h-4 w-4" />
+                          </Button>
+                        )}
+                      </div>
                     </CardHeader>
                     <CardContent className="space-y-4">
                       <div className="grid gap-2">
                         <label className="text-black text-sm font-medium">Bio</label>
                         <Textarea
                           name="aboutMe"
-                          disabled={!isEditing}
+                          disabled={!editingSections.about}
                           value={profile.aboutMe}
                           onChange={handleInputChange}
                           className="bg-white/20 text-black disabled:text-black disabled:opacity-100 min-h-[100px]"
@@ -453,7 +522,7 @@ export default function ProfilePage() {
                         <label className="text-black text-sm font-medium">Life Goals</label>
                         <Textarea
                           name="lifeGoals"
-                          disabled={!isEditing}
+                          disabled={!editingSections.about}
                           value={profile.lifeGoals}
                           onChange={handleInputChange}
                           className="bg-white/20 text-black disabled:text-black disabled:opacity-100"
@@ -465,9 +534,25 @@ export default function ProfilePage() {
 
                   {/* Interests */}
                   <Card className="bg-white/90 backdrop-blur-md border-none">
-                    <CardHeader>
-                      <CardTitle>Interests</CardTitle>
-                      <CardDescription className="text-black/60">Select your interests</CardDescription>
+                    <CardHeader className="flex flex-row items-center justify-between">
+                      <div>
+                        <CardTitle>Interests</CardTitle>
+                        <CardDescription className="text-black/60">Select your interests</CardDescription>
+                      </div>
+                      <div className="flex gap-2">
+                        {editingSections.interests ? (
+                          <SaveButton section="interests" />
+                        ) : (
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => handleSectionEdit('interests')}
+                            className="h-8 w-8"
+                          >
+                            <Pencil className="h-4 w-4" />
+                          </Button>
+                        )}
+                      </div>
                     </CardHeader>
                     <CardContent>
                       <div className="flex flex-wrap gap-2">
@@ -481,36 +566,47 @@ export default function ProfilePage() {
                                 ? 'bg-black text-white hover:bg-gray-800 border-black' 
                                 : 'bg-white/10 text-gray-600 hover:bg-white/20 border-black/50'
                               }
-                              ${!isEditing && 'cursor-default'}
+                              ${!editingSections.interests && 'cursor-default'}
                             `}
-                            onClick={() => isEditing && toggleInterest(interest)}
+                            onClick={() => editingSections.interests && toggleInterest(interest)}
                           >
                             {interest}
-                            {isEditing && profile.interests.includes(interest) && (
+                            {editingSections.interests && profile.interests.includes(interest) && (
                               <span className="ml-1">✓</span>
                             )}
                           </Badge>
                         ))}
                       </div>
-                      {isEditing && (
-                        <p className="text-black/60 text-sm mt-2">
-                          Click to select/deselect interests
-                        </p>
-                      )}
                     </CardContent>
                   </Card>
 
                   {/* Communication Preferences */}
                   <Card className="bg-white/90 backdrop-blur-md border-none">
-                    <CardHeader>
-                      <CardTitle>Communication Preferences</CardTitle>
-                      <CardDescription className="text-black/60">How you prefer to interact</CardDescription>
+                    <CardHeader className="flex flex-row items-center justify-between">
+                      <div>
+                        <CardTitle>Communication Preferences</CardTitle>
+                        <CardDescription className="text-black/60">How you prefer to interact</CardDescription>
+                      </div>
+                      <div className="flex gap-2">
+                        {editingSections.communication ? (
+                          <SaveButton section="communication" />
+                        ) : (
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => handleSectionEdit('communication')}
+                            className="h-8 w-8"
+                          >
+                            <Pencil className="h-4 w-4" />
+                          </Button>
+                        )}
+                      </div>
                     </CardHeader>
                     <CardContent className="space-y-4">
                       <div className="grid gap-2">
                         <label className="text-black text-sm font-medium">Communication Style</label>
                         <Select
-                          disabled={!isEditing}
+                          disabled={!editingSections.communication}
                           value={profile.communicationStyle}
                           onValueChange={handleSelectChange("communicationStyle")}
                         >
@@ -529,7 +625,7 @@ export default function ProfilePage() {
                       <div className="grid gap-2">
                         <label className="text-black text-sm font-medium">Love Language</label>
                         <Select
-                          disabled={!isEditing}
+                          disabled={!editingSections.communication}
                           value={profile.loveLanguage}
                           onValueChange={handleSelectChange("loveLanguage")}
                         >
@@ -558,7 +654,7 @@ export default function ProfilePage() {
                       <div className="grid gap-2">
                         <label className="text-black text-sm font-medium">Activity Level</label>
                         <Select
-                          disabled={!isEditing}
+                          disabled={!editingSections.lifestyle}
                           value={profile.fitnessPreferences.activityLevel}
                           onValueChange={handleSelectChange("fitnessPreferences.activityLevel")}
                         >
@@ -577,7 +673,7 @@ export default function ProfilePage() {
                       <div className="grid gap-2">
                         <label className="text-black text-sm font-medium">Social Style</label>
                         <Select
-                          disabled={!isEditing}
+                          disabled={!editingSections.lifestyle}
                           value={profile.socialPreferences.socialStyle}
                           onValueChange={handleSelectChange("socialPreferences.socialStyle")}
                         >
@@ -606,7 +702,7 @@ export default function ProfilePage() {
                       <div className="grid gap-2">
                         <label className="text-black text-sm font-medium">Learning Style</label>
                         <Select
-                          disabled={!isEditing}
+                          disabled={!editingSections.learning}
                           value={profile.learningPreferences.learningStyle}
                           onValueChange={handleSelectChange("learningPreferences.learningStyle")}
                         >
@@ -625,7 +721,7 @@ export default function ProfilePage() {
                       <div className="grid gap-2">
                         <label className="text-black text-sm font-medium">Work Style</label>
                         <Select
-                          disabled={!isEditing}
+                          disabled={!editingSections.learning}
                           value={profile.workPreferences.workStyle}
                           onValueChange={handleSelectChange("workPreferences.workStyle")}
                         >
@@ -646,9 +742,25 @@ export default function ProfilePage() {
 
                   {/* Food & Drink Preferences */}
                   <Card className="bg-white/90 backdrop-blur-md border-none">
-                    <CardHeader>
-                      <CardTitle>Food & Drink</CardTitle>
-                      <CardDescription className="text-black/60">Your culinary preferences</CardDescription>
+                    <CardHeader className="flex flex-row items-center justify-between">
+                      <div>
+                        <CardTitle>Food & Drink</CardTitle>
+                        <CardDescription className="text-black/60">Your culinary preferences</CardDescription>
+                      </div>
+                      <div className="flex gap-2">
+                        {editingSections.food ? (
+                          <SaveButton section="food" />
+                        ) : (
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => handleSectionEdit('food')}
+                            className="h-8 w-8"
+                          >
+                            <Pencil className="h-4 w-4" />
+                          </Button>
+                        )}
+                      </div>
                     </CardHeader>
                     <CardContent className="space-y-4">
                       <div className="grid gap-2">
@@ -669,19 +781,19 @@ export default function ProfilePage() {
                                     ? 'bg-black text-white hover:bg-gray-800 border-black' 
                                     : 'bg-white/10 text-gray-600 hover:bg-white/20 border-black/50'
                                   }
-                                  ${!isEditing && 'cursor-default'}
+                                  ${!editingSections.food && 'cursor-default'}
                                 `}
-                                onClick={() => isEditing && toggleCuisine(cuisine)}
+                                onClick={() => editingSections.food && toggleCuisine(cuisine)}
                               >
                                 {cuisine}
-                                {isEditing && selectedCuisines.includes(cuisine) && (
+                                {editingSections.food && selectedCuisines.includes(cuisine) && (
                                   <span className="ml-1">✓</span>
                                 )}
                               </Badge>
                             );
                           })}
                         </div>
-                        {isEditing && (
+                        {editingSections.food && (
                           <p className="text-black/60 text-sm mt-2">
                             Click to select/deselect cuisines
                           </p>
@@ -691,18 +803,17 @@ export default function ProfilePage() {
                         <label className="text-black text-sm font-medium">Dietary Restrictions</label>
                         <Input
                           name="foodPreferences.dietaryRestrictions"
-                          disabled={!isEditing}
+                          disabled={!editingSections.food}
                           value={profile.foodPreferences.dietaryRestrictions}
                           onChange={handleInputChange}
                           className="bg-white/20 text-black disabled:text-black disabled:opacity-100"
-                          placeholder="Any dietary restrictions?"
                         />
                       </div>
                       <div className="grid gap-2">
                         <label className="text-black text-sm font-medium">Favorite Beverages</label>
                         <Input
                           name="drinkPreferences.favoriteBeverages"
-                          disabled={!isEditing}
+                          disabled={!editingSections.food}
                           value={profile.drinkPreferences.favoriteBeverages}
                           onChange={handleInputChange}
                           className="bg-white/20 text-black disabled:text-black disabled:opacity-100"
@@ -714,16 +825,32 @@ export default function ProfilePage() {
 
                   {/* Entertainment Preferences */}
                   <Card className="bg-white/90 backdrop-blur-md border-none">
-                    <CardHeader>
-                      <CardTitle>Entertainment</CardTitle>
-                      <CardDescription className="text-black/60">Your entertainment preferences</CardDescription>
+                    <CardHeader className="flex flex-row items-center justify-between">
+                      <div>
+                        <CardTitle>Entertainment</CardTitle>
+                        <CardDescription className="text-black/60">Your entertainment preferences</CardDescription>
+                      </div>
+                      <div className="flex gap-2">
+                        {editingSections.entertainment ? (
+                          <SaveButton section="entertainment" />
+                        ) : (
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => handleSectionEdit('entertainment')}
+                            className="h-8 w-8"
+                          >
+                            <Pencil className="h-4 w-4" />
+                          </Button>
+                        )}
+                      </div>
                     </CardHeader>
                     <CardContent className="space-y-4">
                       <div className="grid gap-2">
                         <label className="text-black text-sm font-medium">Favorite Movies & Shows</label>
                         <Textarea
                           name="entertainmentPreferences.favoriteMoviesShows"
-                          disabled={!isEditing}
+                          disabled={!editingSections.entertainment}
                           value={profile.entertainmentPreferences.favoriteMoviesShows}
                           onChange={handleInputChange}
                           className="bg-white/20 text-black disabled:text-black disabled:opacity-100"
@@ -734,7 +861,7 @@ export default function ProfilePage() {
                         <label className="text-black text-sm font-medium">Favorite Books</label>
                         <Textarea
                           name="entertainmentPreferences.favoriteBooks"
-                          disabled={!isEditing}
+                          disabled={!editingSections.entertainment}
                           value={profile.entertainmentPreferences.favoriteBooks}
                           onChange={handleInputChange}
                           className="bg-white/20 text-black disabled:text-black disabled:opacity-100"
@@ -745,7 +872,7 @@ export default function ProfilePage() {
                         <label className="text-black text-sm font-medium">Music Preferences</label>
                         <Textarea
                           name="musicPreferences.favoriteGenres"
-                          disabled={!isEditing}
+                          disabled={!editingSections.entertainment}
                           value={profile.musicPreferences.favoriteGenres}
                           onChange={handleInputChange}
                           className="bg-white/20 text-black disabled:text-black disabled:opacity-100"
@@ -757,16 +884,32 @@ export default function ProfilePage() {
 
                   {/* Travel Preferences */}
                   <Card className="bg-white/100 backdrop-blur-md border-none">
-                    <CardHeader>
-                      <CardTitle>Travel</CardTitle>
-                      <CardDescription className="text-black/60">Your travel preferences and aspirations</CardDescription>
+                    <CardHeader className="flex flex-row items-center justify-between">
+                      <div>
+                        <CardTitle>Travel</CardTitle>
+                        <CardDescription className="text-black/60">Your travel preferences and aspirations</CardDescription>
+                      </div>
+                      <div className="flex gap-2">
+                        {editingSections.travel ? (
+                          <SaveButton section="travel" />
+                        ) : (
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => handleSectionEdit('travel')}
+                            className="h-8 w-8"
+                          >
+                            <Pencil className="h-4 w-4" />
+                          </Button>
+                        )}
+                      </div>
                     </CardHeader>
                     <CardContent className="space-y-4">
                       <div className="grid gap-2">
                         <label className="text-black text-sm font-medium">Favorite Destinations</label>
                         <Textarea
                           name="travelPreferences.favoriteDestinations"
-                          disabled={!isEditing}
+                          disabled={!editingSections.travel}
                           value={profile.travelPreferences.favoriteDestinations}
                           onChange={handleInputChange}
                           className="bg-white/20 text-black disabled:text-black disabled:opacity-100"
@@ -777,7 +920,7 @@ export default function ProfilePage() {
                         <label className="text-black text-sm font-medium">Travel Goals</label>
                         <Textarea
                           name="travelPreferences.travelGoals"
-                          disabled={!isEditing}
+                          disabled={!editingSections.travel}
                           value={profile.travelPreferences.travelGoals}
                           onChange={handleInputChange}
                           className="bg-white/20 text-black disabled:text-black disabled:opacity-100"
@@ -789,15 +932,31 @@ export default function ProfilePage() {
 
                   {/* Sleep Preferences */}
                   <Card className="bg-white/100 backdrop-blur-md border-none">
-                    <CardHeader>
-                      <CardTitle>Sleep & Daily Routine</CardTitle>
-                      <CardDescription className="text-black/60">Your sleep and daily schedule preferences</CardDescription>
+                    <CardHeader className="flex flex-row items-center justify-between">
+                      <div>
+                        <CardTitle>Sleep & Daily Routine</CardTitle>
+                        <CardDescription className="text-black/60">Your sleep and daily schedule preferences</CardDescription>
+                      </div>
+                      <div className="flex gap-2">
+                        {editingSections.sleep ? (
+                          <SaveButton section="sleep" />
+                        ) : (
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => handleSectionEdit('sleep')}
+                            className="h-8 w-8"
+                          >
+                            <Pencil className="h-4 w-4" />
+                          </Button>
+                        )}
+                      </div>
                     </CardHeader>
                     <CardContent className="space-y-4">
                       <div className="grid gap-2">
                         <label className="text-black text-sm font-medium">Sleep Schedule</label>
                         <Select
-                          disabled={!isEditing}
+                          disabled={!editingSections.sleep}
                           value={profile.sleepPreferences.morningOrEvening}
                           onValueChange={handleSelectChange("sleepPreferences.morningOrEvening")}
                         >
@@ -818,7 +977,7 @@ export default function ProfilePage() {
                         <Input
                           type="time"
                           name="sleepPreferences.usualBedtime"
-                          disabled={!isEditing}
+                          disabled={!editingSections.sleep}
                           value={profile.sleepPreferences.usualBedtime}
                           onChange={handleInputChange}
                           className="bg-white/20 text-black disabled:text-black disabled:opacity-100"
@@ -829,15 +988,31 @@ export default function ProfilePage() {
 
                   {/* AI Interaction Preferences */}
                   <Card className="bg-white/100 backdrop-blur-md border-none">
-                    <CardHeader>
-                      <CardTitle>AI Interaction</CardTitle>
-                      <CardDescription className="text-black/60">How you prefer to interact with your AI companion</CardDescription>
+                    <CardHeader className="flex flex-row items-center justify-between">
+                      <div>
+                        <CardTitle>AI Interaction</CardTitle>
+                        <CardDescription className="text-black/60">How you prefer to interact with your AI companion</CardDescription>
+                      </div>
+                      <div className="flex gap-2">
+                        {editingSections.ai ? (
+                          <SaveButton section="ai" />
+                        ) : (
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => handleSectionEdit('ai')}
+                            className="h-8 w-8"
+                          >
+                            <Pencil className="h-4 w-4" />
+                          </Button>
+                        )}
+                      </div>
                     </CardHeader>
                     <CardContent className="space-y-4">
                       <div className="grid gap-2">
                         <label className="text-black text-sm font-medium">Chat Style</label>
                         <Select
-                          disabled={!isEditing}
+                          disabled={!editingSections.ai}
                           value={profile.aiPreferences.chatStyle}
                           onValueChange={handleSelectChange("aiPreferences.chatStyle")}
                         >
@@ -856,7 +1031,7 @@ export default function ProfilePage() {
                       <div className="grid gap-2">
                         <label className="text-black text-sm font-medium">Notification Frequency</label>
                         <Select
-                          disabled={!isEditing}
+                          disabled={!editingSections.ai}
                           value={profile.aiPreferences.notificationFrequency}
                           onValueChange={handleSelectChange("aiPreferences.notificationFrequency")}
                         >
@@ -876,7 +1051,7 @@ export default function ProfilePage() {
                         <label className="text-black text-sm font-medium">Topics to Avoid</label>
                         <Textarea
                           name="aiPreferences.topicsToAvoid"
-                          disabled={!isEditing}
+                          disabled={!editingSections.ai}
                           value={profile.aiPreferences.topicsToAvoid}
                           onChange={handleInputChange}
                           className="bg-white/20 text-black disabled:text-black disabled:opacity-100"
@@ -888,15 +1063,31 @@ export default function ProfilePage() {
 
                   {/* Privacy Settings */}
                   <Card className="bg-white/100 backdrop-blur-md border-none">
-                    <CardHeader>
-                      <CardTitle>Privacy Settings</CardTitle>
-                      <CardDescription className="text-black/60">Control your data and privacy preferences</CardDescription>
+                    <CardHeader className="flex flex-row items-center justify-between">
+                      <div>
+                        <CardTitle>Privacy Settings</CardTitle>
+                        <CardDescription className="text-black/60">Control your data and privacy preferences</CardDescription>
+                      </div>
+                      <div className="flex gap-2">
+                        {editingSections.privacy ? (
+                          <SaveButton section="privacy" />
+                        ) : (
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => handleSectionEdit('privacy')}
+                            className="h-8 w-8"
+                          >
+                            <Pencil className="h-4 w-4" />
+                          </Button>
+                        )}
+                      </div>
                     </CardHeader>
                     <CardContent className="space-y-4">
                       <div className="grid gap-2">
                         <label className="text-black text-sm font-medium">Privacy Level</label>
                         <Select
-                          disabled={!isEditing}
+                          disabled={!editingSections.privacy}
                           value={profile.aiPreferences.privacySettings}
                           onValueChange={handleSelectChange("aiPreferences.privacySettings")}
                         >
@@ -916,7 +1107,7 @@ export default function ProfilePage() {
                         <label className="text-black text-sm font-medium">Data Sharing Preferences</label>
                         <Textarea
                           name="aiPreferences.privacySettings"
-                          disabled={!isEditing}
+                          disabled={!editingSections.privacy}
                           value={profile.aiPreferences.privacySettings}
                           onChange={handleInputChange}
                           className="bg-white/20 text-black disabled:text-black disabled:opacity-100"
@@ -931,7 +1122,7 @@ export default function ProfilePage() {
 
             {isEditing && (
               <div className="flex justify-end mt-6">
-                <SaveButton />
+                <SaveButton section="basic" />
               </div>
             )}
           </div>
