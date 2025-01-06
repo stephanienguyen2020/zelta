@@ -22,6 +22,7 @@ export default function CharacterCard({
   onNext,
   onPrevious,
 }: CharacterCardProps) {
+
   const getCardStyle = (index: number) => {
     const totalCards = characters.length;
     let position = index - currentIndex;
@@ -42,9 +43,31 @@ export default function CharacterCard({
     };
   };
 
+  const getCharacterImage = (name: string) => {
+    const baseName = name.split(' ')[0].toLowerCase();
+    switch (baseName) {
+      // Male characters
+      case 'alex':
+        return '/images/Alex.svg';
+      case 'sam':
+        return '/images/Sam.svg';
+      case 'jordan':
+        return '/images/Jordan.svg';
+      // Female characters
+      case 'emma':
+        return '/images/Emma.svg';
+      case 'sophie':
+        return '/images/Sophie.svg';
+      case 'olivia':
+        return '/images/Olivia.svg';
+      default:
+        return '/images/placeholder_image.png';
+    }
+  };
+
   return (
     <div className="flex flex-col lg:flex-row items-center gap-24 max-w-7xl mx-auto">
-      <div className="relative w-[430px] h-[932px]">
+      <div className="relative w-[600px] h-[600px]">
         {characters.map((character, index) => (
           <div
             key={character.id}
@@ -53,7 +76,7 @@ export default function CharacterCard({
           >
             <div className="w-full h-full rounded-2xl overflow-hidden">
               <Image
-                src="/images/placeholder_image.png"
+                src={getCharacterImage(character.name)}
                 alt={`${character.name}'s avatar`}
                 fill
                 className="object-cover"
@@ -87,7 +110,9 @@ export default function CharacterCard({
           <p className="text-xl sm:text-2xl">
             {characters[currentIndex].description}
           </p>
-          <BlackButton href="/select">Select</BlackButton>
+          <BlackButton href={`/character/${characters[currentIndex].id}`}>
+            Select
+          </BlackButton>
         </div>
       </div>
     </div>

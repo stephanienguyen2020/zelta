@@ -3,6 +3,8 @@ import Logo from "./components/Logo";
 import GradientBackground from "./components/GradientBackground";
 import BlackButton from "./components/BlackButton";
 
+export const dynamic = "force-dynamic";
+
 export default function Home() {
   return (
     <GradientBackground>
@@ -20,7 +22,7 @@ export default function Home() {
               Perfect AI Partner
             </p>
 
-            <BlackButton href="/select">Start</BlackButton>
+            <BlackButton href="/select-gender">Start</BlackButton>
           </div>
         </div>
       </div>
