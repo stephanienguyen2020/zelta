@@ -30,6 +30,35 @@ export const ChatProvider = ({ children }) => {
     }
   }, [messages]);
 
+  const type = async (message) => {
+    if (loading) return;
+
+    setLoading(true);
+    setMessage(null);
+
+    try {
+      const chatResponse = await api.post("/chat", { text: message });
+
+      console.log(chatResponse);
+
+      // Update handling of chatResponse.data based on new structure
+      const messagesRes = chatResponse.data.map((item) => ({
+        text: item.text,
+        facialExpression: item.facialExpression,
+        animation: item.animation,
+        audio: item.audio,
+        lipsync: item.lipsync,
+      }));
+
+      setAudioRes(messagesRes.map((item) => item.audio)); // Assuming you want to set audio responses
+      setMessages((messages) => [...messages, ...messagesRes]);
+    } catch (error) {
+      console.error("Chat error:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const chat = async (audioBlob) => {
     if (loading) return;
 
@@ -92,6 +121,7 @@ export const ChatProvider = ({ children }) => {
         zoomLevel,
         handleZoomIn,
         handleZoomOut,
+        type,
       }}
     >
       {children}

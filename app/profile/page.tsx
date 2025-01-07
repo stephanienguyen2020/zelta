@@ -25,7 +25,7 @@ import {
   SelectItem,
 } from "@/app/components/ui/select";
 import { debounce } from "@/app/lib/debounce";
-import { setupAutoSave } from "../api/profile/save/save";
+import { setupAutoSave } from "../lib/upload";
 import { Profile } from "@/types/profile";
 
 const availableInterests = [
@@ -325,8 +325,6 @@ export default function ProfilePage() {
 
   const saveProfileToAPI = async (profileData: Profile) => {
     try {
-      const cleanup = await setupAutoSave(profileData);
-      console.log(cleanup);
       const response = await fetch("/api/profile/save", {
         method: "POST",
         headers: {
@@ -357,6 +355,8 @@ export default function ProfilePage() {
       });
       // Save to API in the background
       await saveProfileToAPI(newProfile);
+
+      await setupAutoSave();
 
       setTimeout(() => {
         setEditingSections((prev) => {

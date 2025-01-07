@@ -3,6 +3,7 @@
 Zelta is an Azure-powered AI application that creates meaningful relationships through personalized interactions. Built on a sophisticated multi-agent architecture, it offers emotionally intelligent companions that learn and evolve with each user.
 
 ## :card_index_dividers: Project Structure
+
 ```
 .
 .
@@ -30,6 +31,7 @@ Zelta is an Azure-powered AI application that creates meaningful relationships t
 ├── types/
 
 ```
+
 ## :rocket: Core Features
 
 ### :toolbox: Intelligent Conversation System (backed by Azure OpenAI Service)
@@ -153,13 +155,27 @@ This guide provides detailed instructions for setting up Zelta locally. Follow t
 
 ### :building_construction: Setup Instructions
 
-1. **Create Python Virtual Environment**
+1. **Navigate into the backend directory**
+
+```bash
+cd main_app
+```
+
+2. **Install lipsync**
+
+```bash
+mkdir bin
+```
+
+Download [Rhubarb Lipsync](https://github.com/DanielSWolf/rhubarb-lip-sync/releases) and unzip. Copy all files and move them to the `bin` folder.
+
+3. **Create Python Virtual Environment**
 
 ```bash
 python3.11 -m venv env
 ```
 
-2. **Activate Virtual Environment**
+4. **Activate Virtual Environment**
 
 ```bash
 # Linux/MacOS
@@ -169,38 +185,43 @@ source env/bin/activate
 .\env\Scripts\activate
 ```
 
-3. **Navigate into the project directory:**
-```bash
-cd main_app
-```
-
-4. **Install Python Dependencies**
+5. **Install Python Dependencies**
 
 ```bash
 pip install -r requirements.txt
 ```
 
-5. **Configure Environment Variables**
+6. **Configure Environment Variables**
 
 ```bash
 cp .env.sample .env
 # Edit .env with your Azure credentials and configurations
 ```
 
-6. **Optional: Start Docker Services for local Database PostgreSQL setup**
+7. **Optional: Start Docker Services for local Database PostgreSQL setup**
 
 ```bash
 docker-compose up -d
 ```
 
-7. **Start Backend Server**
+8. **Start Backend Server**
 
 ```bash
 # From project root
 uvicorn main:app --reload
 ```
 
-8. **Install & Start Frontend**
+Open a new terminal tab
+
+```bash
+cd main_app/frontend
+npm i
+npm run dev
+```
+
+9. **Install & Start Frontend**
+
+Go back to root and run these commands
 
 ```bash
 # Install dependencies

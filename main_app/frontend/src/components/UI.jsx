@@ -8,10 +8,10 @@ import settingIcon from "../assets/setting.svg";
 import SettingsModal from "./SettingsModal";
 import typeIcon from "../assets/type.svg";
 import ChatMessages from "./ChatMessages";
-import api from "../services/api";
 
 export const UI = ({ hidden, ...props }) => {
-  const { chat, loading, handleZoomIn, handleZoomOut, zoomLevel } = useChat();
+  const { chat, loading, handleZoomIn, handleZoomOut, zoomLevel, type } =
+    useChat();
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [inputMode, setInputMode] = useState(null); // null, 'voice', or 'type'
   const [messages, setMessages] = useState([]);
@@ -39,7 +39,7 @@ export const UI = ({ hidden, ...props }) => {
   const handleSelectType = async (message) => {
     setMessages((prev) => [...prev, message]);
     try {
-      await chat({ text: message });
+      await type(message);
     } catch (error) {
       console.error("Error sending message:", error);
     }

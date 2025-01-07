@@ -20,6 +20,7 @@ from app.utils.lipsync import generate_lip_sync
 from app.utils.read_json import read_json_file
 from app.utils.wav_converter import convert_webm_to_wav
 from app.utils.base64_converter import convert_audio_to_base64
+from app.utils.convert_to_pdf import convert_text_to_pdf
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.services import conversation_service
 
@@ -160,12 +161,26 @@ async def upload_file(
     file: UploadFile = File(...),
     index_name: Literal["user_docs", "user_info"] = Form(...)
 ):
-    if file.content_type != 'application/pdf':
+    try:
+        if file.content_type == 'text/plain':
+            # raise HTTPException(
+            #     status_code=status.HTTP_400_BAD_REQUEST,
+            #     detail="Please upload a PDF file."
+            # )
+            content = await file.read()
+            file = convert_text_to_pdf(content.decode('utf-8'), file.filename)
+        elif file.content_type != 'application/pdf':
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Please upload a PDF file."
+            )
+        
+        await upload_docs(uploaded_file=file, category="user info", index_name=index_name)
+        
+        return {"detail": "File uploaded successfully"}
+
+    except Exception as e:
         raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Please upload a PDF file."
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=str(e)
         )
-    
-    await upload_docs(uploaded_file=file, category="uploaded_docs", index_name=index_name)
-    
-    return {"detail": "File uploaded successfully"}
