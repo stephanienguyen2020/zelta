@@ -34,8 +34,7 @@ Zelta is an Azure-powered AI application that creates meaningful relationships t
 
 ## :rocket: Core Features
 
-### :toolbox: Intelligent Conversation System (backed by Azure OpenAI Service)
-
+### :toolbox: Intelligent Conversation System 
 - **Multi-Agent Architecture**: Powered by Autogen and Azure OpenAI Service for dynamic, context-aware interactions
 - **Emotional Intelligence**: Memory-enhanced responses for more human-like interactions
 - **Real-time Awareness**: Time-sensitive responses that maintain conversational relevance
