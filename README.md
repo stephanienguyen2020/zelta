@@ -44,9 +44,8 @@ Zelta is an Azure-powered AI application that creates meaningful relationships t
 ### :speech_balloon: Speech Processing Pipeline
 
 - **Voice Interface**: Advanced speech-to-speech communication
-- **Natural Synthesis**: Azure Speech Services for emotionally expressive responses
-- **Lip Sync**: Rhubarb technology for synchronized facial animations
-- **Immersive Experience**: Lifelike conversational interactions
+- **Natural Synthesis**: Azure Speech Services for speech to text and text to speech capabilities with high accuracy
+- **Lip Sync**: Rhubarb Lip Sync technology for synchronized 2D mouth animations
 
 ### :cupid: Profile Management
 
@@ -73,10 +72,10 @@ Zelta is an Azure-powered AI application that creates meaningful relationships t
 ### :toolbox: Backend Stack
 
 - **Database & Storage**:
-  - Azure Cosmos DB for PostgreSQL with PGVector for retrieval of vector embeddings
-  - Azure AI Search index and Azure Blob Storage for user information and uploaded documents
+  - Azure Cosmos DB for PostgreSQL with PGVector for chat history retrieval of vector embeddings and searching
+  - Azure AI Search index and Azure Blob Storage for storing user information and uploaded documents
 - **Search**: Azure AI Search with profile indexing for semantic search
-- **Speech Services**: Azure Speech Services
+- **Speech Services**: Azure Speech Services (speech to text, text to speech)
 - **Documents text extractions**: Azure AI Document Intelligence
 
 ### :desktop_computer: Frontend Stack
@@ -101,46 +100,13 @@ Zelta is an Azure-powered AI application that creates meaningful relationships t
 
 1. **User Proxy**: Initial query handling
 2. **Reformulate Agent**: Context-rich query processing
-3. **Intent Classifier**: Semantic routers to identify user's intent
+3. **Intent Classifier**: A semantic router to identify user's intent
 4. **Specialized Agents**:
    - Document Reading Agent
    - Web Search Agent
    - Conversation Agent
-5. **Relationship Consulting Agent**: Response refinement
-6. **Memory Agent**: User information extraction and storage
-
-## :rocket: Getting Started
-
-1. Clone the repository:
-
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) to view the application.
-
-## :rocket: Documentation
-
-For detailed documentation about:
-
-- [Agent Architecture](docs/agents.md)
-- [Azure Services Integration](docs/azure-services.md)
-- [Memory System](docs/memory-system.md)
-- [Speech Pipeline](docs/speech-pipeline.md)
-
-## :rocket: Contributing
-
-We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details.
-
-## :rocket: License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+5. **Relationship Consulting Agent**: Response refinement based on user information (hobbies, preference, etc.)
+6. **Memory Agent**: User information extraction from the conversation and storage to Azure AI Search
 
 ## :rocket: Project Setup Guide
 
@@ -155,13 +121,32 @@ This guide provides detailed instructions for setting up Zelta locally. Follow t
 
 ### :building_construction: Setup Instructions
 
-1. **Navigate into the backend directory**
+1. **Clone the repository:**
+
+```bash
+git clone https://github.com/stephanienguyen2020/zelta.git
+cd zelta
+```
+
+2. **Install dependencies:**
+
+```bash
+npm install
+# or
+yarn install
+# or
+npm install
+```
+
+Open [http://localhost:3000](http://localhost:3000) to view the application.
+
+3. **Navigate into the backend directory**
 
 ```bash
 cd main_app
 ```
 
-2. **Install lipsync**
+4. **Install lipsync**
 
 ```bash
 mkdir bin
@@ -169,13 +154,13 @@ mkdir bin
 
 Download [Rhubarb Lipsync](https://github.com/DanielSWolf/rhubarb-lip-sync/releases) and unzip. Copy all files and move them to the `bin` folder.
 
-3. **Create Python Virtual Environment**
+5. **Create Python Virtual Environment**
 
 ```bash
 python3.11 -m venv env
 ```
 
-4. **Activate Virtual Environment**
+6. **Activate Virtual Environment**
 
 ```bash
 # Linux/MacOS
@@ -185,26 +170,26 @@ source env/bin/activate
 .\env\Scripts\activate
 ```
 
-5. **Install Python Dependencies**
+7. **Install Python Dependencies**
 
 ```bash
 pip install -r requirements.txt
 ```
 
-6. **Configure Environment Variables**
+8. **Configure Environment Variables**
 
 ```bash
 cp .env.sample .env
 # Edit .env with your Azure credentials and configurations
 ```
 
-7. **Optional: Start Docker Services for local Database PostgreSQL setup**
+9. **Optional: Start Docker Services for local Database PostgreSQL setup**
 
 ```bash
 docker-compose up -d
 ```
 
-8. **Start Backend Server**
+10. **Start Backend Server**
 
 ```bash
 # From project root
@@ -219,7 +204,7 @@ npm i
 npm run dev
 ```
 
-9. **Install & Start Frontend**
+11. **Install & Start Frontend**
 
 Go back to root and run these commands
 
@@ -230,3 +215,11 @@ npm install
 # Start development server
 npm run dev
 ```
+
+## :rocket: Contributing
+
+We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details.
+
+## :rocket: License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
