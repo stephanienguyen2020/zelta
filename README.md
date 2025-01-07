@@ -21,7 +21,7 @@ Zelta is an Azure-powered AI application that creates meaningful relationships t
 │   ├── main.py
 │   ├── requirements.txt                # Required dependencies for back-end
 │   ├── OAI_CONFIG_LIST.json.sample     # Sample Azure OpenAI configuration
-│   ├── .env.sample                     # Sample environment variables configuration 
+│   ├── .env.sample                     # Sample environment variables configuration
 │   ├── frontend/
 │   │   ├── public/
 │   │   ├── src/
@@ -34,7 +34,8 @@ Zelta is an Azure-powered AI application that creates meaningful relationships t
 
 ## :rocket: Core Features
 
-### :toolbox: Intelligent Conversation System 
+### :toolbox: Intelligent Conversation System
+
 - **Multi-Agent Architecture**: Powered by Autogen and Azure OpenAI Service for dynamic, context-aware interactions
 - **Emotional Intelligence**: Memory-enhanced responses for more human-like interactions
 - **Real-time Awareness**: Time-sensitive responses that maintain conversational relevance
@@ -67,6 +68,7 @@ Zelta is an Azure-powered AI application that creates meaningful relationships t
   - Vector-based retrieval for contextual responses
 
 ## :rocket: Technical Architecture
+
 ### :toolbox: Backend Stack
 
 - **Database & Storage**:
@@ -131,9 +133,15 @@ cd zelta
 ```bash
 npm install
 # or
-yarn install
+yarn
+```
+
+Run this command line to start the app
+
+```bash
+npm run dev
 # or
-npm install
+yarn dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) to view the application.
@@ -147,6 +155,7 @@ cd main_app
 **4. Install lipsync**
 
 ```bash
+# Create a bin directory
 mkdir bin
 ```
 
@@ -194,23 +203,13 @@ docker-compose up -d
 uvicorn main:app --reload
 ```
 
+**11. Install & Start Frontend**
+
 Open a new terminal tab
 
 ```bash
 cd main_app/frontend
 npm i
-npm run dev
-```
-
-**11. Install & Start Frontend**
-
-Go back to root and run these commands
-
-```bash
-# Install dependencies
-npm install
-
-# Start development server
 npm run dev
 ```
 
