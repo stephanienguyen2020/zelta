@@ -1,4 +1,4 @@
-# Zelta - Advanced AI Companionship Platform
+# :robot: Zelta - Advanced AI Companionship Platform :hugs: :couple: :two_women_holding_hands: :two_men_holding_hands:
 
 Zelta is an Azure-powered AI application that creates meaningful relationships through personalized interactions. Built on a sophisticated multi-agent architecture, it offers emotionally intelligent companions that learn and evolve with each user.
 
@@ -17,11 +17,11 @@ Zelta is an Azure-powered AI application that creates meaningful relationships t
 │   │   ├── assistance/                 # Agents
 │   │   ├── ...
 │   │   ├── routers/                    # Backend Routers
-│   │   ├── utils/                      # contains utilities like working with Azure AI Search, etc.
+│   │   ├── utils/                      # Contains utilities like Azure AI Search, etc.
 │   ├── main.py
-│   ├── requirements.txt                # required dependencies for back-end
-│   ├── OAI_CONFIG_LIST.json.sample     # sample Azure OpenAI configurations
-│   ├── .env.sample                     # sample environment variables for back-end
+│   ├── requirements.txt                # Required dependencies for back-end
+│   ├── OAI_CONFIG_LIST.json.sample     # Sample Azure OpenAI configuration
+│   ├── .env.sample                     # Sample environment variables configuration 
 │   ├── frontend/
 │   │   ├── public/
 │   │   ├── src/
@@ -68,7 +68,6 @@ Zelta is an Azure-powered AI application that creates meaningful relationships t
   - Vector-based retrieval for contextual responses
 
 ## :rocket: Technical Architecture
-
 ### :toolbox: Backend Stack
 
 - **Database & Storage**:
@@ -121,14 +120,14 @@ This guide provides detailed instructions for setting up Zelta locally. Follow t
 
 ### :building_construction: Setup Instructions
 
-1. **Clone the repository:**
+**1. Clone the repository:**
 
 ```bash
 git clone https://github.com/stephanienguyen2020/zelta.git
 cd zelta
 ```
 
-2. **Install dependencies:**
+**2. Install dependencies:**
 
 ```bash
 npm install
@@ -140,13 +139,13 @@ npm install
 
 Open [http://localhost:3000](http://localhost:3000) to view the application.
 
-3. **Navigate into the backend directory**
+**3. Navigate into the backend directory**
 
 ```bash
 cd main_app
 ```
 
-4. **Install lipsync**
+**4. Install lipsync**
 
 ```bash
 mkdir bin
@@ -154,13 +153,13 @@ mkdir bin
 
 Download [Rhubarb Lipsync](https://github.com/DanielSWolf/rhubarb-lip-sync/releases) and unzip. Copy all files and move them to the `bin` folder.
 
-5. **Create Python Virtual Environment**
+**5. Create Python Virtual Environment**
 
 ```bash
 python3.11 -m venv env
 ```
 
-6. **Activate Virtual Environment**
+**6. Activate Virtual Environment**
 
 ```bash
 # Linux/MacOS
@@ -170,26 +169,26 @@ source env/bin/activate
 .\env\Scripts\activate
 ```
 
-7. **Install Python Dependencies**
+**7. Install Python Dependencies**
 
 ```bash
 pip install -r requirements.txt
 ```
 
-8. **Configure Environment Variables**
+**8. Configure Environment Variables**
 
 ```bash
 cp .env.sample .env
 # Edit .env with your Azure credentials and configurations
 ```
 
-9. **Optional: Start Docker Services for local Database PostgreSQL setup**
+**9. Optional: Start Docker Services for local Database PostgreSQL setup**
 
 ```bash
 docker-compose up -d
 ```
 
-10. **Start Backend Server**
+**10. Start Backend Server**
 
 ```bash
 # From project root
@@ -204,7 +203,7 @@ npm i
 npm run dev
 ```
 
-11. **Install & Start Frontend**
+**11. Install & Start Frontend**
 
 Go back to root and run these commands
 
