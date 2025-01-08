@@ -3,12 +3,11 @@
 Zelta is an Azure-powered AI application that creates meaningful relationships through personalized interactions. Built on a sophisticated multi-agent architecture, it offers emotionally intelligent companions that learn and evolve with each user.
 
 ## :card_index_dividers: Project Structure
-
 ```
 .
 .
 .
-├── app/
+├── app/                                # Front-end folder for the landing page, user preferences & user profile
 ├── data/
 ├── hooks/
 ├── lib/
