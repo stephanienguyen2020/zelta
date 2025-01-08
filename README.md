@@ -8,7 +8,7 @@ Zelta is an Azure-powered AI application that creates meaningful relationships t
 .
 .
 .
-├── app/
+├── app/                                # Front-end folder for the landing page, user preferences & user profile
 ├── data/
 ├── hooks/
 ├── lib/
