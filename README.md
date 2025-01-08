@@ -2,9 +2,6 @@
 
 Zelta is an Azure-powered AI application that creates meaningful relationships through personalized interactions. Built on a sophisticated multi-agent architecture, it offers emotionally intelligent companions that learn and evolve with each user.
 
-Demo:
-[![Zelta Demo](https://img.youtube.com/vi/iR8Ka1hLMdw/0.jpg)](https://www.youtube.com/watch?v=iR8Ka1hLMdw)
-
 ## :card_index_dividers: Project Structure
 ```
 .
