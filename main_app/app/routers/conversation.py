@@ -107,7 +107,7 @@ async def detect_wake_word(
 ):
     # Read the audio file bytes
     audio_bytes = await audio.read()
-    if audio.content_type == "audio/webm":
+    if audio.content_type == "audio/webm" or audio.content_type == "video/webm":
         audio_bytes = convert_webm_to_wav(audio_bytes)
     elif audio.content_type != "audio/wav":
         raise HTTPException(

@@ -107,9 +107,7 @@ const corresponding = {
 let setupMode = false;
 
 export function Girlfriend(props) {
-  const { nodes, materials, scene } = useGLTF(
-    "/models/67572eadfee41e4181553ed8.glb"
-  );
+  const { nodes, materials, scene } = useGLTF("/models/Cynthia.glb");
 
   const { message, onMessagePlayed, chat, audioRes } = useChat();
 

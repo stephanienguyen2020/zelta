@@ -63,7 +63,7 @@ export const Experience = () => {
       <Suspense>
         <Dots position-y={1.25} position-x={-0.02} />
       </Suspense>
-      <Girlfriend position-y={-0.5} />
+      <Cynthia position-y={-0.5} />
       <ContactShadows opacity={0.7} />
     </>
   );
