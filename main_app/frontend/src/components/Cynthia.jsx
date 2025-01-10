@@ -469,5 +469,5 @@ export function Girlfriend(props) {
   );
 }
 
-useGLTF.preload("/models/67572eadfee41e4181553ed8.glb");
+useGLTF.preload("/models/Cynthia.glb");
 useGLTF.preload("/models/animations.glb");

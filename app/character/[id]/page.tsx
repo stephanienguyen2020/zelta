@@ -43,8 +43,7 @@ export default function CharacterPage() {
 
   const handleChatClick = (e: React.MouseEvent) => {
     e.preventDefault();
-    window.location.href =
-      "https://zelta-atfl5cymw-sillysavants-projects.vercel.app/";
+    window.location.href = "http://localhost:5173";
   };
 
   return (
