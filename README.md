@@ -67,7 +67,7 @@ Zelta is an Azure-powered AI application that creates meaningful relationships t
   - Vector-based retrieval for contextual responses
 
 ## :rocket: Technical Architecture
-
+https://github.com/user-attachments/assets/42673008-f479-42a9-b8e6-789424a79ab8
 ### :toolbox: Backend Stack
 
 - **Database & Storage**:
