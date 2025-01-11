@@ -106,8 +106,8 @@ const corresponding = {
 
 let setupMode = false;
 
-export function Girlfriend(props) {
-  const { nodes, materials, scene } = useGLTF("/models/Cynthia.glb");
+export function Emma(props) {
+  const { nodes, materials, scene } = useGLTF("/models/Emma.glb");
 
   const { message, onMessagePlayed, chat, audioRes } = useChat();
 
@@ -469,5 +469,5 @@ export function Girlfriend(props) {
   );
 }
 
-useGLTF.preload("/models/Cynthia.glb");
+useGLTF.preload("/models/Emma.glb");
 useGLTF.preload("/models/animations.glb");

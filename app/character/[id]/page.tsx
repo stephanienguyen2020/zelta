@@ -43,7 +43,10 @@ export default function CharacterPage() {
 
   const handleChatClick = (e: React.MouseEvent) => {
     e.preventDefault();
-    window.location.href = "http://localhost:5173";
+    const targetUrl = `http://localhost:5173?name=${encodeURIComponent(
+      character.name
+    )}`;
+    window.location.href = targetUrl;
   };
 
   return (
