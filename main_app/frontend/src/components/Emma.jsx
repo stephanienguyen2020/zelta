@@ -93,15 +93,35 @@ const facialExpressions = {
 };
 
 const corresponding = {
-  A: "viseme_PP",
-  B: "viseme_kk",
-  C: "viseme_I",
-  D: "viseme_AA",
-  E: "viseme_O",
-  F: "viseme_U",
-  G: "viseme_FF",
-  H: "viseme_TH",
-  X: "viseme_PP",
+  // Common viseme mappings for Ready Player Me models
+  A: "viseme_aa",
+  B: "viseme_b_m_p",
+  C: "viseme_ee",
+  D: "viseme_ah",
+  E: "viseme_oh",
+  F: "viseme_oo",
+  G: "viseme_f_v",
+  H: "viseme_th",
+  X: "viseme_idle",
+};
+
+// Add this function to handle mouth shapes
+const setMouthShape = (shape, value) => {
+  const morphTargets = {
+    viseme_aa: ["mouthOpen", "jawOpen"],
+    viseme_ee: ["mouthSmile", "mouthStretch"],
+    viseme_oh: ["mouthFunnel"],
+    viseme_oo: ["mouthPucker"],
+    viseme_f_v: ["mouthPress"],
+    viseme_th: ["tongueOut"],
+    viseme_idle: [],
+  };
+
+  if (morphTargets[shape]) {
+    morphTargets[shape].forEach((target) => {
+      lerpMorphTarget(target, value, 0.2);
+    });
+  }
 };
 
 let setupMode = false;
@@ -296,31 +316,35 @@ export function Emma(props) {
     // LIPSYNC
     if (setupMode || !audio) return;
 
-    const appliedMorphTargets = [];
     if (message && lipsync && audio) {
       const currentAudioTime = audio.currentTime;
+      let currentViseme = "viseme_idle";
+
+      // Find current viseme
       for (let i = 0; i < lipsync.mouthCues.length; i++) {
         const mouthCue = lipsync.mouthCues[i];
         if (
           currentAudioTime >= mouthCue.start &&
           currentAudioTime <= mouthCue.end
         ) {
-          const viseme = corresponding[mouthCue.value];
-          if (viseme) {
-            appliedMorphTargets.push(viseme);
-            lerpMorphTarget(viseme, 1, 0.2);
-          }
+          currentViseme = corresponding[mouthCue.value] || "viseme_idle";
           break;
         }
       }
+
+      // Apply mouth shape
+      Object.keys(corresponding).forEach((key) => {
+        const viseme = corresponding[key];
+        setMouthShape(viseme, viseme === currentViseme ? 1 : 0);
+      });
     }
 
-    // Reset inactive visemes
-    Object.values(corresponding).forEach((viseme) => {
-      if (!appliedMorphTargets.includes(viseme)) {
-        lerpMorphTarget(viseme, 0, 0.1);
-      }
-    });
+    // Basic mouth movement if no lipsync
+    if (audio && !lipsync) {
+      const volume = Math.random() * 0.5; // Simulate audio volume
+      lerpMorphTarget("mouthOpen", volume, 0.1);
+      lerpMorphTarget("jawOpen", volume * 0.8, 0.1);
+    }
   });
 
   useControls("FacialExpressions", {
@@ -413,25 +437,38 @@ export function Emma(props) {
 
   useEffect(() => {
     if (message?.audio && !isPlaying) {
-      const audio = new Audio(message.audio);
-      setAudio(audio);
+      const audioElement = new Audio(message.audio);
+      audioElement.addEventListener("canplaythrough", () => {
+        console.log("Audio ready to play");
+        setAudio(audioElement);
+        setIsPlaying(true);
+        audioElement.play().catch(console.error);
+      });
 
-      audio.addEventListener("ended", () => {
+      audioElement.addEventListener("ended", () => {
+        console.log("Audio ended");
         setIsPlaying(false);
+        setAudio(null);
         onMessagePlayed();
       });
 
-      audio.play();
-      setIsPlaying(true);
-      setLipsync(message.lipsync);
+      audioElement.addEventListener("error", (e) => {
+        console.error("Audio error:", e);
+      });
+
+      // Debug lipsync data
+      if (message.lipsync) {
+        console.log("Lipsync data received:", message.lipsync);
+        setLipsync(message.lipsync);
+      }
     }
   }, [message, isPlaying, onMessagePlayed]);
 
   useEffect(() => {
-    if (nodes?.EyeLeft?.morphTargetDictionary) {
+    if (nodes?.Wolf3D_Head?.morphTargetDictionary) {
       console.log(
-        "Available morph targets:",
-        Object.keys(nodes.EyeLeft.morphTargetDictionary)
+        "Head morph targets:",
+        Object.keys(nodes.Wolf3D_Head.morphTargetDictionary)
       );
     }
   }, [nodes]);
