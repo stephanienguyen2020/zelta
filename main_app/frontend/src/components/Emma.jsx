@@ -92,38 +92,6 @@ const facialExpressions = {
   },
 };
 
-const corresponding = {
-  // Common viseme mappings for Ready Player Me models
-  A: "viseme_aa",
-  B: "viseme_b_m_p",
-  C: "viseme_ee",
-  D: "viseme_ah",
-  E: "viseme_oh",
-  F: "viseme_oo",
-  G: "viseme_f_v",
-  H: "viseme_th",
-  X: "viseme_idle",
-};
-
-// Add this function to handle mouth shapes
-const setMouthShape = (shape, value) => {
-  const morphTargets = {
-    viseme_aa: ["mouthOpen", "jawOpen"],
-    viseme_ee: ["mouthSmile", "mouthStretch"],
-    viseme_oh: ["mouthFunnel"],
-    viseme_oo: ["mouthPucker"],
-    viseme_f_v: ["mouthPress"],
-    viseme_th: ["tongueOut"],
-    viseme_idle: [],
-  };
-
-  if (morphTargets[shape]) {
-    morphTargets[shape].forEach((target) => {
-      lerpMorphTarget(target, value, 0.2);
-    });
-  }
-};
-
 let setupMode = false;
 
 export function Emma(props) {
@@ -132,9 +100,14 @@ export function Emma(props) {
   const { message, onMessagePlayed, chat, audioRes } = useChat();
 
   const [lipsync, setLipsync] = useState();
+  const [blink, setBlink] = useState(false);
+  const [winkLeft, setWinkLeft] = useState(false);
+  const [winkRight, setWinkRight] = useState(false);
+  const [facialExpression, setFacialExpression] = useState("");
+  const [audio, setAudio] = useState();
+  const [isPlaying, setIsPlaying] = useState(false);
 
   const audioQueue = useRef([]);
-  const [isPlaying, setIsPlaying] = useState(false);
   const currentTime = useRef(0);
   const frameRef = useRef({
     audio: null,
@@ -287,11 +260,35 @@ export function Emma(props) {
     });
   };
 
-  const [blink, setBlink] = useState(false);
-  const [winkLeft, setWinkLeft] = useState(false);
-  const [winkRight, setWinkRight] = useState(false);
-  const [facialExpression, setFacialExpression] = useState("");
-  const [audio, setAudio] = useState();
+  const corresponding = {
+    A: "viseme_aa",
+    B: "viseme_b_m_p",
+    C: "viseme_ee",
+    D: "viseme_ah",
+    E: "viseme_oh",
+    F: "viseme_oo",
+    G: "viseme_f_v",
+    H: "viseme_th",
+    X: "viseme_idle",
+  };
+
+  const setMouthShape = (shape, value) => {
+    const morphTargets = {
+      viseme_aa: ["mouthOpen", "jawOpen"],
+      viseme_ee: ["mouthSmile", "mouthStretch"],
+      viseme_oh: ["mouthFunnel"],
+      viseme_oo: ["mouthPucker"],
+      viseme_f_v: ["mouthPress"],
+      viseme_th: ["tongueOut"],
+      viseme_idle: [],
+    };
+
+    if (morphTargets[shape]) {
+      morphTargets[shape].forEach((target) => {
+        lerpMorphTarget(target, value, 0.2);
+      });
+    }
+  };
 
   useFrame(() => {
     // First part - facial expressions
