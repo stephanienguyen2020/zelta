@@ -9,7 +9,7 @@ import SettingsModal from "./SettingsModal";
 import typeIcon from "../assets/type.svg";
 import ChatMessages from "./ChatMessages";
 
-export const UI = ({ hidden, ...props }) => {
+export const UI = () => {
   const { chat, loading, handleZoomIn, handleZoomOut, zoomLevel, type } =
     useChat();
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);

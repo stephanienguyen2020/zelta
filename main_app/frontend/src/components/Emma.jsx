@@ -261,7 +261,7 @@ export function Emma(props) {
             set({
               [target]: value,
             });
-          } catch (e) {}
+          } catch {}
         }
       }
     });
@@ -274,11 +274,12 @@ export function Emma(props) {
   const [audio, setAudio] = useState();
 
   useFrame(() => {
-    !setupMode &&
+    // First part - facial expressions
+    if (!setupMode) {
       Object.keys(nodes.EyeLeft.morphTargetDictionary).forEach((key) => {
         const mapping = facialExpressions[facialExpression];
         if (key === "eyeBlinkLeft" || key === "eyeBlinkRight") {
-          return; // eyes wink/blink are handled separately
+          return;
         }
         if (mapping && mapping[key]) {
           lerpMorphTarget(key, mapping[key], 0.1);
@@ -286,14 +287,14 @@ export function Emma(props) {
           lerpMorphTarget(key, 0, 0.1);
         }
       });
+    }
 
+    // Blink handling
     lerpMorphTarget("eyeBlinkLeft", blink || winkLeft ? 1 : 0, 0.5);
     lerpMorphTarget("eyeBlinkRight", blink || winkRight ? 1 : 0, 0.5);
 
     // LIPSYNC
-    if (setupMode || !audio) {
-      return;
-    }
+    if (setupMode || !audio) return;
 
     const appliedMorphTargets = [];
     if (message && lipsync && audio) {
@@ -314,7 +315,7 @@ export function Emma(props) {
       }
     }
 
-    // Reset any visemes that aren't currently active
+    // Reset inactive visemes
     Object.values(corresponding).forEach((viseme) => {
       if (!appliedMorphTargets.includes(viseme)) {
         lerpMorphTarget(viseme, 0, 0.1);
