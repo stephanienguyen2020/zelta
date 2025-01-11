@@ -411,6 +411,31 @@ export function Emma(props) {
     }
   }, [message, lipsync, audio]);
 
+  useEffect(() => {
+    if (message?.audio && !isPlaying) {
+      const audio = new Audio(message.audio);
+      setAudio(audio);
+
+      audio.addEventListener("ended", () => {
+        setIsPlaying(false);
+        onMessagePlayed();
+      });
+
+      audio.play();
+      setIsPlaying(true);
+      setLipsync(message.lipsync);
+    }
+  }, [message, isPlaying, onMessagePlayed]);
+
+  useEffect(() => {
+    if (nodes?.EyeLeft?.morphTargetDictionary) {
+      console.log(
+        "Available morph targets:",
+        Object.keys(nodes.EyeLeft.morphTargetDictionary)
+      );
+    }
+  }, [nodes]);
+
   return (
     <group {...props} dispose={null} ref={group}>
       <primitive object={nodes.Hips} />

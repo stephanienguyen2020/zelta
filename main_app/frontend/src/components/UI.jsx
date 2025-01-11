@@ -79,6 +79,7 @@ export const UI = () => {
           onClick={handleSettingsClick}
           className="fixed top-4 right-4 pointer-events-auto p-2 transition-all duration-300 hover:opacity-75"
         >
+          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={settingIcon} alt="Settings" className="w-6 h-6" />
         </button>
 
@@ -99,6 +100,7 @@ export const UI = () => {
                   : "hover:bg-[rgba(205,205,205,0.75)]"
               }`}
           >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={zoomInIcon} alt="Zoom in" className="w-6 h-6" />
           </button>
           <button
@@ -113,6 +115,7 @@ export const UI = () => {
                   : "hover:bg-[rgba(205,205,205,0.75)]"
               }`}
           >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={zoomOutIcon} alt="Zoom out" className="w-6 h-6" />
           </button>
           {inputMode === "voice" && (
@@ -122,6 +125,7 @@ export const UI = () => {
                 bg-[rgba(205,205,205,0.60)] shadow-[0px_4.96px_62.003px_0px_rgba(0,0,0,0.19)] 
                 backdrop-blur-[5.9px] transition-all duration-300 hover:bg-[rgba(205,205,205,0.75)]"
             >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={typeIcon} alt="Switch to typing" className="w-6 h-6" />
             </button>
           )}

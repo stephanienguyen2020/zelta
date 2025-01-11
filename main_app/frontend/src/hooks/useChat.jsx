@@ -66,22 +66,7 @@ export const ChatProvider = ({ children }) => {
     setMessage(null);
 
     try {
-      // Step 1: Transcribe audio using /wake endpoint
-      const wakeFormData = new FormData();
-      wakeFormData.append("audio", audioBlob);
-
-      const wakeResponse = await api.post("/wake", wakeFormData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
-
-      const transcribedText = wakeResponse.data.transcribed_text;
-
-      // Step 2: Send transcribed text to /chat endpoint
-      const chatResponse = await api.post("/chat", { text: transcribedText });
-
-      console.log(chatResponse);
-
-      // Update handling of chatResponse.data based on new structure
+      const chatResponse = await api.post("/chat", { text: audioBlob });
       const messagesRes = chatResponse.data.map((item) => ({
         text: item.text,
         facialExpression: item.facialExpression,
@@ -90,7 +75,7 @@ export const ChatProvider = ({ children }) => {
         lipsync: item.lipsync,
       }));
 
-      setAudioRes(messagesRes.map((item) => item.audio)); // Assuming you want to set audio responses
+      console.log("Received messages:", messagesRes);
       setMessages((messages) => [...messages, ...messagesRes]);
     } catch (error) {
       console.error("Chat error:", error);
