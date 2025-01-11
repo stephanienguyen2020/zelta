@@ -291,12 +291,12 @@ export function Emma(props) {
     lerpMorphTarget("eyeBlinkRight", blink || winkRight ? 1 : 0, 0.5);
 
     // LIPSYNC
-    if (setupMode) {
+    if (setupMode || !audio) {
       return;
     }
 
     const appliedMorphTargets = [];
-    if (message && lipsync) {
+    if (message && lipsync && audio) {
       const currentAudioTime = audio.currentTime;
       for (let i = 0; i < lipsync.mouthCues.length; i++) {
         const mouthCue = lipsync.mouthCues[i];
@@ -304,18 +304,21 @@ export function Emma(props) {
           currentAudioTime >= mouthCue.start &&
           currentAudioTime <= mouthCue.end
         ) {
-          appliedMorphTargets.push(corresponding[mouthCue.value]);
-          lerpMorphTarget(corresponding[mouthCue.value], 1, 0.2);
+          const viseme = corresponding[mouthCue.value];
+          if (viseme) {
+            appliedMorphTargets.push(viseme);
+            lerpMorphTarget(viseme, 1, 0.2);
+          }
           break;
         }
       }
     }
 
-    Object.values(corresponding).forEach((value) => {
-      if (appliedMorphTargets.includes(value)) {
-        return;
+    // Reset any visemes that aren't currently active
+    Object.values(corresponding).forEach((viseme) => {
+      if (!appliedMorphTargets.includes(viseme)) {
+        lerpMorphTarget(viseme, 0, 0.1);
       }
-      lerpMorphTarget(value, 0, 0.1);
     });
   });
 
@@ -399,6 +402,13 @@ export function Emma(props) {
     nextBlink();
     return () => clearTimeout(blinkTimeout);
   }, []);
+
+  useEffect(() => {
+    if (message && lipsync) {
+      console.log("Lipsync data:", lipsync);
+      console.log("Audio state:", audio);
+    }
+  }, [message, lipsync, audio]);
 
   return (
     <group {...props} dispose={null} ref={group}>
