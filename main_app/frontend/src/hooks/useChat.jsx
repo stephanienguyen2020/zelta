@@ -14,7 +14,6 @@ export const ChatProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState(null);
   const [cameraZoomed, setCameraZoomed] = useState(false);
-  const [audioRes, setAudioRes] = useState();
   const [messages, setMessages] = useState([]);
   const [zoomLevel, setZoomLevel] = useState(0); // 0 = default, 1 = first zoom, 2 = closer, etc.
 
@@ -50,7 +49,6 @@ export const ChatProvider = ({ children }) => {
         lipsync: item.lipsync,
       }));
 
-      setAudioRes(messagesRes.map((item) => item.audio)); // Assuming you want to set audio responses
       setMessages((messages) => [...messages, ...messagesRes]);
     } catch (error) {
       console.error("Chat error:", error);

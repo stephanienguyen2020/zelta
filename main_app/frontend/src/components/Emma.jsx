@@ -132,92 +132,54 @@ export function Emma(props) {
     setAnimation(message.animation);
     setFacialExpression(message.facialExpression);
     setLipsync(message.lipsync);
-    // const audio = new Audio("data:audio/mp3;base64," + audioRes);
-    // console.log("audio", audioRes);
-    // audio.play();
-    // setAudio(audio);
-    // audio.onended = onMessagePlayed;
 
-    if (!audioRes || !Array.isArray(audioRes)) {
-      setAnimation("Idle");
-      resetState();
-      return;
-    }
-
-    // Store the audio queue
-    audioQueue.current = audioRes.map((audioData) => ({
-      audio: new Audio(`data:audio/mp3;base64,${audioData}`),
-      played: false,
-    }));
-
-    // Start playing the first audio
-    playNextAudio();
-
-    // Cleanup function
     return () => {
-      if (frameRef.current.audio) {
-        frameRef.current.audio.pause();
-        frameRef.current.audio.currentTime = 0;
-      }
       resetState();
     };
-  }, [audioRes]);
+  }, [message]);
 
-  const resetState = () => {
-    setAudio(null);
-    setLipsync(null);
-    setIsPlaying(false);
-  };
+  useEffect(() => {
+    if (message?.audio && !isPlaying) {
+      // Create a Blob from the base64 data
+      const audioData = atob(message.audio);
+      const arrayBuffer = new ArrayBuffer(audioData.length);
+      const uint8Array = new Uint8Array(arrayBuffer);
 
-  const playNextAudio = () => {
-    const currentIndex = audioQueue.current.findIndex((item) => !item.played);
+      for (let i = 0; i < audioData.length; i++) {
+        uint8Array[i] = audioData.charCodeAt(i);
+      }
 
-    if (currentIndex === -1 || !message) {
-      setAnimation("Idle");
-      resetState();
-      return;
-    }
+      const audioBlob = new Blob([arrayBuffer], { type: "audio/mp3" });
+      const audioUrl = URL.createObjectURL(audioBlob);
+      const audioElement = new Audio(audioUrl);
 
-    const currentMessage = Array.isArray(message)
-      ? message[currentIndex]
-      : message;
-    setAnimation(currentMessage.animation);
-    setFacialExpression(currentMessage.facialExpression);
-    setLipsync(currentMessage.lipsync);
+      audioElement.addEventListener("canplaythrough", () => {
+        console.log("Audio ready to play");
+        setAudio(audioElement);
+        setIsPlaying(true);
+        audioElement.play().catch((error) => {
+          console.error("Audio play error:", error);
+        });
+      });
 
-    const currentAudioItem = audioQueue.current[currentIndex];
-    const audioElement = currentAudioItem.audio;
-
-    audioElement.onended = () => {
-      currentAudioItem.played = true;
-      if (currentIndex === audioQueue.current.length - 1) {
-        resetState();
+      audioElement.addEventListener("ended", () => {
+        console.log("Audio ended");
+        setIsPlaying(false);
+        setAudio(null);
+        URL.revokeObjectURL(audioUrl); // Clean up the URL
         onMessagePlayed();
-        setAnimation("Idle");
-      } else {
-        playNextAudio();
-      }
-    };
+      });
 
-    audioElement.onplay = () => {
-      setIsPlaying(true);
-    };
+      return () => {
+        if (audioElement) {
+          audioElement.pause();
+          audioElement.src = "";
+        }
+        URL.revokeObjectURL(audioUrl); // Clean up on unmount
+      };
+    }
+  }, [message, isPlaying, onMessagePlayed]);
 
-    audioElement.onpause = () => {
-      setIsPlaying(false);
-    };
-
-    // Update currentTime in animation frame
-    audioElement.ontimeupdate = () => {
-      currentTime.current = audioElement.currentTime;
-    };
-
-    setAudio(audioElement);
-    audioElement.play().catch((error) => {
-      console.error("Error playing audio:", error);
-      setIsPlaying(false);
-    });
-  };
   const { animations } = useGLTF("/models/animations.glb");
 
   const group = useRef();
@@ -431,44 +393,6 @@ export function Emma(props) {
       console.log("Audio state:", audio);
     }
   }, [message, lipsync, audio]);
-
-  useEffect(() => {
-    if (message?.audio && !isPlaying) {
-      // Create a Blob from the base64 data
-      const audioData = atob(message.audio);
-      const arrayBuffer = new ArrayBuffer(audioData.length);
-      const uint8Array = new Uint8Array(arrayBuffer);
-
-      for (let i = 0; i < audioData.length; i++) {
-        uint8Array[i] = audioData.charCodeAt(i);
-      }
-
-      const audioBlob = new Blob([arrayBuffer], { type: "audio/mp3" });
-      const audioUrl = URL.createObjectURL(audioBlob);
-      const audioElement = new Audio(audioUrl);
-
-      audioElement.addEventListener("canplaythrough", () => {
-        console.log("Audio ready to play");
-        setAudio(audioElement);
-        setIsPlaying(true);
-        audioElement.play().catch((error) => {
-          console.error("Audio play error:", error);
-        });
-      });
-
-      audioElement.addEventListener("ended", () => {
-        console.log("Audio ended");
-        setIsPlaying(false);
-        setAudio(null);
-        URL.revokeObjectURL(audioUrl); // Clean up the URL
-        onMessagePlayed();
-      });
-
-      return () => {
-        URL.revokeObjectURL(audioUrl); // Clean up on unmount
-      };
-    }
-  }, [message, isPlaying, onMessagePlayed]);
 
   useEffect(() => {
     if (nodes?.Wolf3D_Head?.morphTargetDictionary) {
