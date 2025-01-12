@@ -97,7 +97,7 @@ let setupMode = false;
 export function Emma(props) {
   const { nodes, materials, scene } = useGLTF("/models/Emma.glb");
 
-  const { message, onMessagePlayed, chat, audioRes } = useChat();
+  const { message, onMessagePlayed, chat } = useChat();
 
   const [lipsync, setLipsync] = useState();
   const [blink, setBlink] = useState(false);
@@ -107,8 +107,6 @@ export function Emma(props) {
   const [audio, setAudio] = useState();
   const [isPlaying, setIsPlaying] = useState(false);
 
-  const audioQueue = useRef([]);
-  const currentTime = useRef(0);
   const frameRef = useRef({
     audio: null,
     lipsync: null,
