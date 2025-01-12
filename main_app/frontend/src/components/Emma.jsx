@@ -235,21 +235,42 @@ export function Emma(props) {
   };
 
   const setMouthShape = (shape, value) => {
+    // Direct mouth shape mappings for Ready Player Me models
     const morphTargets = {
       viseme_aa: ["mouthOpen", "jawOpen"],
+      viseme_b_m_p: ["mouthClose", "mouthPress"],
       viseme_ee: ["mouthSmile", "mouthStretch"],
-      viseme_oh: ["mouthFunnel"],
-      viseme_oo: ["mouthPucker"],
-      viseme_f_v: ["mouthPress"],
-      viseme_th: ["tongueOut"],
-      viseme_idle: [],
+      viseme_ah: ["mouthOpen", "jawOpen"],
+      viseme_oh: ["mouthFunnel", "mouthOpen"],
+      viseme_oo: ["mouthPucker", "mouthFunnel"],
+      viseme_f_v: ["mouthPress", "mouthStretch"],
+      viseme_th: ["tongueOut", "mouthOpen"],
+      viseme_idle: ["mouthClose"],
     };
 
     if (morphTargets[shape]) {
       morphTargets[shape].forEach((target) => {
-        lerpMorphTarget(target, value, 0.2);
+        // Increase the speed and intensity of mouth movements
+        lerpMorphTarget(target, value * 1.5, 0.3);
       });
     }
+  };
+
+  const resetState = () => {
+    // Reset all mouth-related morph targets
+    lerpMorphTarget("mouthOpen", 0, 1);
+    lerpMorphTarget("jawOpen", 0, 1);
+    lerpMorphTarget("mouthClose", 0, 1);
+    lerpMorphTarget("mouthPress", 0, 1);
+    lerpMorphTarget("mouthSmile", 0, 1);
+    lerpMorphTarget("mouthStretch", 0, 1);
+    lerpMorphTarget("mouthFunnel", 0, 1);
+    lerpMorphTarget("mouthPucker", 0, 1);
+    lerpMorphTarget("tongueOut", 0, 1);
+
+    setAudio(null);
+    setLipsync(null);
+    setIsPlaying(false);
   };
 
   useFrame(() => {
@@ -291,18 +312,24 @@ export function Emma(props) {
         }
       }
 
-      // Apply mouth shape
+      // Apply mouth shape with more intensity
       Object.keys(corresponding).forEach((key) => {
         const viseme = corresponding[key];
         setMouthShape(viseme, viseme === currentViseme ? 1 : 0);
       });
+
+      // Add some random micro-movements for more natural look
+      if (currentViseme !== "viseme_idle") {
+        const jitter = Math.sin(Date.now() * 0.01) * 0.1;
+        lerpMorphTarget("jawOpen", 0.2 + jitter, 0.3);
+      }
     }
 
     // Basic mouth movement if no lipsync
     if (audio && !lipsync) {
-      const volume = Math.random() * 0.5; // Simulate audio volume
-      lerpMorphTarget("mouthOpen", volume, 0.1);
-      lerpMorphTarget("jawOpen", volume * 0.8, 0.1);
+      const volume = Math.random() * 0.8; // Increased random movement
+      lerpMorphTarget("mouthOpen", volume, 0.2);
+      lerpMorphTarget("jawOpen", volume * 0.6, 0.2);
     }
   });
 
