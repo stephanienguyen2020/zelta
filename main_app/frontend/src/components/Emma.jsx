@@ -434,30 +434,39 @@ export function Emma(props) {
 
   useEffect(() => {
     if (message?.audio && !isPlaying) {
-      const audioElement = new Audio(message.audio);
+      // Create a Blob from the base64 data
+      const audioData = atob(message.audio);
+      const arrayBuffer = new ArrayBuffer(audioData.length);
+      const uint8Array = new Uint8Array(arrayBuffer);
+
+      for (let i = 0; i < audioData.length; i++) {
+        uint8Array[i] = audioData.charCodeAt(i);
+      }
+
+      const audioBlob = new Blob([arrayBuffer], { type: "audio/mp3" });
+      const audioUrl = URL.createObjectURL(audioBlob);
+      const audioElement = new Audio(audioUrl);
+
       audioElement.addEventListener("canplaythrough", () => {
         console.log("Audio ready to play");
         setAudio(audioElement);
         setIsPlaying(true);
-        audioElement.play().catch(console.error);
+        audioElement.play().catch((error) => {
+          console.error("Audio play error:", error);
+        });
       });
 
       audioElement.addEventListener("ended", () => {
         console.log("Audio ended");
         setIsPlaying(false);
         setAudio(null);
+        URL.revokeObjectURL(audioUrl); // Clean up the URL
         onMessagePlayed();
       });
 
-      audioElement.addEventListener("error", (e) => {
-        console.error("Audio error:", e);
-      });
-
-      // Debug lipsync data
-      if (message.lipsync) {
-        console.log("Lipsync data received:", message.lipsync);
-        setLipsync(message.lipsync);
-      }
+      return () => {
+        URL.revokeObjectURL(audioUrl); // Clean up on unmount
+      };
     }
   }, [message, isPlaying, onMessagePlayed]);
 

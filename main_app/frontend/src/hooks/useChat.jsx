@@ -61,24 +61,39 @@ export const ChatProvider = ({ children }) => {
 
   const chat = async (audioBlob) => {
     if (loading) return;
-
     setLoading(true);
     setMessage(null);
 
     try {
-      const chatResponse = await api.post("/chat", { text: audioBlob });
+      let payload;
+      let headers = {};
+
+      if (audioBlob instanceof Blob) {
+        const formData = new FormData();
+        formData.append("audio", audioBlob);
+        payload = formData;
+        headers = { "Content-Type": "multipart/form-data" };
+      } else {
+        payload = { text: audioBlob };
+        headers = { "Content-Type": "application/json" };
+      }
+
+      const chatResponse = await api.post("/chat", payload, { headers });
       const messagesRes = chatResponse.data.map((item) => ({
         text: item.text,
         facialExpression: item.facialExpression,
         animation: item.animation,
-        audio: item.audio,
+        audio: item.audio, // This should be base64 encoded audio data
         lipsync: item.lipsync,
       }));
 
-      console.log("Received messages:", messagesRes);
       setMessages((messages) => [...messages, ...messagesRes]);
     } catch (error) {
-      console.error("Chat error:", error);
+      console.error("Chat error details:", {
+        message: error.message,
+        response: error.response?.data,
+        status: error.response?.status,
+      });
     } finally {
       setLoading(false);
     }
